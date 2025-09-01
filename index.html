@@ -5,27 +5,207 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football Tournament Manager</title>
     <style>
-        /* --- CSS Variables --- */
+        /* --- CSS Variables (Base Dark Theme) --- */
         :root {
             --primary-bg: #1a1a2e;
             --secondary-bg: #2e2e4a;
-            --accent-color: #e94560;
+            --card-bg: #2e2e4a;
             --text-color: #e0e0e0;
             --light-text-color: #a0a0a0;
             --border-color: #4a4a6a;
             --hover-bg: #3a3a5a;
+            --accent-color: #e94560; /* Default accent */
+            --button-bg: var(--accent-color);
+            --button-text: white;
             --success-color: #4CAF50;
             --warning-color: #FFC107;
             --error-color: #F44336;
             --info-color: #2196F3;
+            --header-bg: var(--secondary-bg);
+            --sidebar-bg: var(--secondary-bg);
+            --body-background-image: none;
+            --body-background-size: auto;
+            --body-background-position: center;
+            --body-background-repeat: no-repeat;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --input-bg: var(--hover-bg);
+            --input-border: var(--border-color);
+            --modal-bg: var(--primary-bg);
+            --modal-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            --link-color: var(--accent-color);
+            --table-header-bg: var(--hover-bg);
+            --table-row-even-bg: var(--secondary-bg);
+            --table-row-odd-bg: var(--card-bg);
+            --table-row-hover-bg: var(--hover-bg);
+            --advancing-bg: rgba(76, 175, 80, 0.15);
+            --relegating-bg: rgba(244, 67, 54, 0.15);
+            --fab-bg: var(--accent-color);
+            --fab-text: white;
+            --fab-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            --hamburger-color: var(--text-color);
+            --header-text-color: var(--text-color);
+            --sidebar-active-bg: var(--accent-color);
+            --sidebar-active-text: white;
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --tab-inactive-text: var(--light-text-color);
+            --tab-hover-text: var(--text-color);
+            --knockout-line-color: var(--border-color);
+            --knockout-arrow-color: var(--accent-color);
+        }
 
-            --league-primary: #005792; /* EPL inspired */
-            --champions-primary: #1a237e; /* UCL inspired */
-            --worldcup-primary: #8e24aa; /* WC inspired */
+        /* --- Light Mode --- */
+        :root.light-mode {
+            --primary-bg: #f0f2f5;
+            --secondary-bg: #ffffff;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --light-text-color: #666666;
+            --border-color: #e0e0e0;
+            --hover-bg: #f5f5f5;
+            --accent-color: #007bff; /* Default light accent */
+            --button-bg: var(--accent-color);
+            --button-text: white;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --error-color: #dc3545;
+            --info-color: #17a2b8;
+            --header-bg: var(--secondary-bg);
+            --sidebar-bg: var(--secondary-bg);
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --input-bg: #f8f9fa;
+            --input-border: #ced4da;
+            --modal-bg: var(--primary-bg);
+            --modal-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            --link-color: var(--accent-color);
+            --table-header-bg: #e9ecef;
+            --table-row-even-bg: #f8f9fa;
+            --table-row-odd-bg: #ffffff;
+            --table-row-hover-bg: #e2e6ea;
+            --advancing-bg: rgba(40, 167, 69, 0.1);
+            --relegating-bg: rgba(220, 53, 69, 0.1);
+            --fab-bg: var(--accent-color);
+            --fab-text: white;
+            --fab-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            --hamburger-color: var(--text-color);
+            --header-text-color: var(--text-color);
+            --sidebar-active-bg: var(--accent-color);
+            --sidebar-active-text: white;
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --tab-inactive-text: var(--light-text-color);
+            --tab-hover-text: var(--text-color);
+            --knockout-line-color: var(--border-color);
+            --knockout-arrow-color: var(--accent-color);
+        }
 
-            --header-height: 60px;
-            --sidebar-width: 250px;
-            --spacing-unit: 16px;
+        /* --- League Theme --- */
+        :root.league-theme {
+            --accent-color: #e94560; /* Vibrant Red */
+            --primary-bg: #1a1a2e; /* Dark Blue */
+            --secondary-bg: #2e2e4a; /* Slightly lighter dark blue */
+            --header-bg: var(--primary-bg);
+            --sidebar-bg: var(--primary-bg);
+            --button-bg: var(--accent-color);
+            --link-color: var(--accent-color);
+            --sidebar-active-bg: var(--accent-color);
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --knockout-arrow-color: var(--accent-color);
+            --body-background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="%231a1a2e"/><path d="M0 0L100 100M100 0L0 100" stroke="%233a3a5a" stroke-width="0.5"/></svg>');
+            --body-background-size: 200px;
+            --body-background-position: center;
+            --body-background-repeat: repeat;
+        }
+        :root.light-mode.league-theme {
+            --accent-color: #dc3545; /* Vibrant Red for light mode */
+            --primary-bg: #f0f2f5;
+            --secondary-bg: #ffffff;
+            --header-bg: var(--primary-bg);
+            --sidebar-bg: var(--primary-bg);
+            --sidebar-active-bg: var(--accent-color);
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --knockout-arrow-color: var(--accent-color);
+            --body-background-image: linear-gradient(rgba(255,255,255,0.7), rgba(255,255,255,0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="%23f0f2f5"/><path d="M0 0L100 100M100 0L0 100" stroke="%23e0e0e0" stroke-width="0.5"/></svg>');
+        }
+
+        /* --- Champions League Theme --- */
+        :root.champions-theme {
+            --accent-color: #ffe600; /* Bright Star Yellow */
+            --primary-bg: #0b0c2a; /* Midnight Navy */
+            --secondary-bg: #1a1b3e; /* Slightly lighter navy */
+            --header-bg: var(--primary-bg);
+            --sidebar-bg: var(--primary-bg);
+            --button-bg: var(--accent-color);
+            --button-text: #0b0c2a; /* Dark text on yellow buttons */
+            --link-color: var(--accent-color);
+            --border-color: #4a4a6a;
+            --hover-bg: #2a2b5e;
+            --sidebar-active-bg: var(--accent-color);
+            --sidebar-active-text: var(--primary-bg);
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --knockout-arrow-color: var(--accent-color);
+            --body-background-image: radial-gradient(circle at center, #1a1b3e 0%, #0b0c2a 70%, #000000 100%);
+            --body-background-size: cover;
+            --body-background-position: center;
+            --body-background-repeat: no-repeat;
+            --card-shadow: 0 0 15px rgba(255, 230, 0, 0.2); /* Subtle glow */
+        }
+        :root.light-mode.champions-theme {
+            --accent-color: #ffc107; /* Yellow for light mode */
+            --primary-bg: #e0e0f0;
+            --secondary-bg: #f0f0ff;
+            --header-bg: var(--primary-bg);
+            --sidebar-bg: var(--primary-bg);
+            --button-text: #333;
+            --sidebar-active-bg: var(--accent-color);
+            --sidebar-active-text: var(--primary-bg);
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --knockout-arrow-color: var(--accent-color);
+            --body-background-image: radial-gradient(circle at center, #f0f0ff 0%, #e0e0f0 70%, #d0d0e0 100%);
+            --card-shadow: 0 0 10px rgba(255, 193, 7, 0.1);
+        }
+
+        /* --- World Cup Theme --- */
+        :root.worldcup-theme {
+            --accent-color: #ffd700; /* Gold */
+            --primary-bg: #004d00; /* Rich Green */
+            --secondary-bg: #006400; /* Slightly lighter green */
+            --header-bg: var(--primary-bg);
+            --sidebar-bg: var(--primary-bg);
+            --button-bg: var(--accent-color);
+            --button-text: #004d00; /* Dark green text on gold buttons */
+            --link-color: var(--accent-color);
+            --border-color: #3a7a3a;
+            --hover-bg: #007a00;
+            --sidebar-active-bg: var(--accent-color);
+            --sidebar-active-text: var(--primary-bg);
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --knockout-arrow-color: var(--accent-color);
+            --body-background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="%23006400"/><circle cx="50" cy="50" r="40" fill="none" stroke="%23008000" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="%23008000" stroke-width="1"/></svg>');
+            --body-background-size: 250px;
+            --body-background-position: center;
+            --body-background-repeat: repeat;
+        }
+        :root.light-mode.worldcup-theme {
+            --accent-color: #daa520; /* Gold for light mode */
+            --primary-bg: #e0ffe0;
+            --secondary-bg: #f0fff0;
+            --header-bg: var(--primary-bg);
+            --sidebar-bg: var(--primary-bg);
+            --button-text: #333;
+            --sidebar-active-bg: var(--accent-color);
+            --sidebar-active-text: var(--primary-bg);
+            --tab-active-border: var(--accent-color);
+            --tab-active-text: var(--accent-color);
+            --knockout-arrow-color: var(--accent-color);
+            --body-background-image: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" fill="%23e0ffe0"/><circle cx="50" cy="50" r="40" fill="none" stroke="%23c0ffc0" stroke-width="2"/><circle cx="50" cy="50" r="20" fill="none" stroke="%23c0ffc0" stroke-width="1"/></svg>');
         }
 
         /* --- Base Styles --- */
@@ -35,96 +215,171 @@
             padding: 0;
             background-color: var(--primary-bg);
             color: var(--text-color);
-            display: flex;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: auto 1fr;
             min-height: 100vh;
             overflow-x: hidden;
-            font-size: 14px;
+            font-size: 0.95rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-image: var(--body-background-image);
+            background-size: var(--body-background-size);
+            background-position: var(--body-background-position);
+            background-repeat: var(--body-background-repeat);
         }
 
         h1, h2, h3, h4, h5, h6 {
             color: var(--text-color);
             margin-top: 0;
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
+            font-weight: 600;
         }
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; }
+        h3 { font-size: 1.4rem; }
 
         a {
-            color: var(--accent-color);
+            color: var(--link-color);
             text-decoration: none;
+            transition: color 0.2s ease;
         }
-
         a:hover {
             text-decoration: underline;
+            color: var(--accent-color);
         }
 
         button, .btn {
-            background-color: var(--accent-color);
-            color: white;
+            background-color: var(--button-bg);
+            color: var(--button-text);
             border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            padding: 0.6rem 1rem;
+            border-radius: 0.3rem;
             cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.2s ease;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 0.5rem;
+            font-weight: 500;
         }
-
         button:hover, .btn:hover {
-            background-color: #c73a50;
+            background-color: var(--accent-color); /* Use accent for hover */
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
+        button:active, .btn:active {
+            transform: translateY(0);
+        }
         button:disabled, .btn:disabled {
             background-color: var(--border-color);
             cursor: not-allowed;
+            opacity: 0.7;
+            transform: none;
+            box-shadow: none;
         }
 
         input[type="text"], input[type="number"], input[type="date"], select, textarea {
-            background-color: var(--secondary-bg);
-            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
             color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 1em;
+            padding: 0.6rem 0.8rem;
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
             width: 100%;
             box-sizing: border-box;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
         }
-
-        input[type="checkbox"] {
-            margin-right: 5px;
+        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3);
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.4rem;
             color: var(--light-text-color);
+            font-size: 0.85rem;
         }
 
         .form-group {
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
         }
 
-        /* --- Layout --- */
+        /* --- Header Bar --- */
+        #header-bar {
+            grid-column: 1 / -1;
+            grid-row: 1;
+            background-color: var(--header-bg);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--box-shadow);
+            z-index: 200;
+            position: sticky;
+            top: 0;
+            height: 3.5rem;
+            box-sizing: border-box;
+        }
+        #header-bar .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--header-text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        #header-bar .logo span {
+            color: var(--accent-color);
+        }
+
+        .hamburger-menu {
+            display: none; /* Hidden on desktop */
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--hamburger-color);
+            cursor: pointer;
+            padding: 0.2rem;
+            line-height: 1;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+        .theme-toggle:hover {
+            background-color: var(--hover-bg);
+        }
+
+        /* --- Sidebar --- */
         #sidebar {
+            grid-column: 1;
+            grid-row: 2;
             width: var(--sidebar-width);
-            background-color: var(--secondary-bg);
-            padding: var(--spacing-unit);
+            background-color: var(--sidebar-bg);
+            padding: 1.5rem 1rem;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             overflow-y: auto;
-            position: sticky;
-            top: 0;
-            height: 100vh;
-            z-index: 100;
+            z-index: 150;
+            transition: transform 0.3s ease;
         }
 
         #sidebar h2 {
             color: var(--accent-color);
             text-align: center;
-            margin-bottom: var(--spacing-unit) * 1.5;
-            font-size: 1.5em;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
         }
 
         #sidebar nav ul {
@@ -134,16 +389,18 @@
         }
 
         #sidebar nav ul li {
-            margin-bottom: 5px;
+            margin-bottom: 0.3rem;
         }
 
         #sidebar nav ul li a, .sidebar-item {
-            display: block;
-            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.7rem 1rem;
             color: var(--text-color);
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.2s ease;
+            border-radius: 0.3rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
             cursor: pointer;
         }
 
@@ -153,83 +410,95 @@
         }
 
         #sidebar nav ul li a.active, .sidebar-item.active {
-            background-color: var(--accent-color);
-            color: white;
+            background-color: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+            font-weight: 600;
         }
 
         .sidebar-section-title {
             color: var(--light-text-color);
-            font-size: 0.9em;
-            margin-top: var(--spacing-unit);
-            margin-bottom: 10px;
-            padding: 0 15px;
+            font-size: 0.8rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            padding: 0 1rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 600;
         }
 
         .sidebar-tournament-list {
-            max-height: 300px; /* Adjust as needed */
+            max-height: 30vh; /* Adjust as needed */
             overflow-y: auto;
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
             border-top: 1px solid var(--border-color);
-            padding-top: var(--spacing-unit);
+            padding-top: 1rem;
         }
 
         .sidebar-tournament-list .sidebar-item {
-            padding-left: 25px;
-            font-size: 0.95em;
+            padding-left: 1.8rem;
+            font-size: 0.9rem;
         }
 
+        /* --- Main Content --- */
         #main-content {
-            flex-grow: 1;
-            padding: var(--spacing-unit) * 1.5;
+            grid-column: 2;
+            grid-row: 2;
+            padding: 1.5rem 2rem;
             overflow-y: auto;
+            transition: opacity 0.3s ease; /* For theme switching animation */
         }
 
         #tournament-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-unit) * 1.5;
-            padding-bottom: var(--spacing-unit);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
 
         #tournament-header h1 {
             margin: 0;
-            font-size: 2em;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
         }
 
         #tournament-tabs {
             display: flex;
-            margin-bottom: var(--spacing-unit);
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
+            gap: 0.5rem;
         }
 
         .tab-button {
             background-color: transparent;
             border: none;
-            padding: 10px 20px;
-            color: var(--light-text-color);
+            padding: 0.8rem 1.2rem;
+            color: var(--tab-inactive-text);
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1rem;
             transition: color 0.2s ease, border-bottom 0.2s ease;
             border-bottom: 3px solid transparent;
             margin-bottom: -1px; /* To align with border */
+            font-weight: 500;
         }
 
         .tab-button:hover {
-            color: var(--text-color);
+            color: var(--tab-hover-text);
         }
 
         .tab-button.active {
-            color: var(--accent-color);
-            border-bottom: 3px solid var(--accent-color);
+            color: var(--tab-active-text);
+            border-bottom: 3px solid var(--tab-active-border);
+            font-weight: 600;
         }
 
         .tab-content {
             display: none;
-            padding-top: var(--spacing-unit);
+            padding-top: 1rem;
         }
 
         .tab-content.active {
@@ -237,66 +506,86 @@
         }
 
         /* --- Utility Classes --- */
-        .flex-row { display: flex; align-items: center; gap: var(--spacing-unit); }
-        .flex-col { display: flex; flex-direction: column; gap: var(--spacing-unit); }
+        .flex-row { display: flex; align-items: center; gap: 1rem; }
+        .flex-col { display: flex; flex-direction: column; gap: 1rem; }
         .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
         .align-center { align-items: center; }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
-        .mt-1 { margin-top: var(--spacing-unit); }
-        .mb-1 { margin-bottom: var(--spacing-unit); }
-        .mb-2 { margin-bottom: var(--spacing-unit) * 2; }
-        .p-1 { padding: var(--spacing-unit); }
-        .p-2 { padding: var(--spacing-unit) * 2; }
+        .mt-1 { margin-top: 1rem; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .p-1 { padding: 1rem; }
+        .p-2 { padding: 2rem; }
         .card {
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
-            padding: var(--spacing-unit);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            margin-bottom: var(--spacing-unit);
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            padding: 1.2rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
         }
         .grid-2-col {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-unit);
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: 1.5rem;
         }
         .grid-3-col {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-unit);
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+            gap: 1.5rem;
         }
         .grid-4-col {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--spacing-unit);
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+            gap: 1.5rem;
         }
 
         /* --- Tables --- */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+            margin-bottom: 1rem;
+        }
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: var(--spacing-unit);
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
             overflow: hidden;
+            min-width: 600px; /* Ensure horizontal scroll on small screens */
         }
 
         .data-table th, .data-table td {
-            padding: 12px 15px;
+            padding: 0.8rem 1rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
 
         .data-table th {
-            background-color: var(--hover-bg);
+            background-color: var(--table-header-bg);
             color: var(--light-text-color);
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.9em;
+            font-size: 0.8rem;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
+        .data-table tbody tr:nth-child(even) {
+            background-color: var(--table-row-even-bg);
+        }
+        .data-table tbody tr:nth-child(odd) {
+            background-color: var(--table-row-odd-bg);
+        }
         .data-table tbody tr:hover {
-            background-color: var(--hover-bg);
+            background-color: var(--table-row-hover-bg);
         }
 
         .data-table tbody tr:last-child td {
@@ -305,28 +594,32 @@
 
         .data-table .team-name {
             font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .data-table .team-logo-placeholder {
-            width: 24px;
-            height: 24px;
+            width: 1.8rem;
+            height: 1.8rem;
             border-radius: 50%;
             background: linear-gradient(45deg, #ccc, #888);
             display: inline-block;
             vertical-align: middle;
-            margin-right: 8px;
             border: 1px solid var(--border-color);
+            flex-shrink: 0;
         }
 
         .data-table .sortable {
             cursor: pointer;
             position: relative;
+            padding-right: 1.5rem;
         }
 
         .data-table .sortable::after {
             content: '';
             position: absolute;
-            right: 0;
+            right: 0.5rem;
             top: 50%;
             transform: translateY(-50%);
             width: 0;
@@ -350,72 +643,93 @@
         }
 
         /* --- Match Fixtures --- */
+        .fixture-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            gap: 1rem;
+        }
+        .fixture-list.single-column {
+            grid-template-columns: 1fr;
+        }
+
         .fixture-list .fixture-item {
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
-            padding: 12px var(--spacing-unit);
-            margin-bottom: 8px;
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            padding: 1rem 1.2rem;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 0.5rem;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
             border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
         }
 
         .fixture-list .fixture-item:hover {
             background-color: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
         }
 
         .fixture-item.played {
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
-        .fixture-item .match-info {
-            flex-grow: 1;
+        .fixture-item .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--light-text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .fixture-item .match-teams {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .fixture-item .team-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .fixture-item .team-display.away {
+            flex-direction: row-reverse;
         }
 
         .fixture-item .team-name {
-            font-weight: bold;
-            flex-basis: 30%;
-            text-align: right;
-        }
-
-        .fixture-item .team-name.away {
-            text-align: left;
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .fixture-item .score {
-            font-weight: bold;
-            font-size: 1.1em;
-            min-width: 60px;
+            font-size: 1.2em;
+            min-width: 2.5rem;
             text-align: center;
+            color: var(--text-color);
         }
 
         .fixture-item .vs {
             color: var(--light-text-color);
             font-size: 0.9em;
-            min-width: 20px;
-            text-align: center;
-        }
-
-        .fixture-item .date-time {
-            font-size: 0.85em;
-            color: var(--light-text-color);
-            min-width: 120px;
+            min-width: 1.5rem;
             text-align: center;
         }
 
         .fixture-item .status-badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.75em;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.2rem;
+            font-size: 0.7rem;
             font-weight: bold;
             text-transform: uppercase;
-            margin-left: var(--spacing-unit);
+            margin-top: 0.5rem;
+            align-self: flex-end;
         }
 
         .status-badge.scheduled { background-color: var(--info-color); color: white; }
@@ -424,19 +738,27 @@
 
         /* --- Group Stage Cards --- */
         .group-card {
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
-            padding: var(--spacing-unit);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background-color: var(--card-bg);
+            border-radius: 0.5rem;
+            padding: 1.2rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 1rem;
         }
 
         .group-card h3 {
             margin-top: 0;
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
             color: var(--accent-color);
-            font-size: 1.2em;
+            font-size: 1.2rem;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
+            padding-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .group-card h3::before {
+            content: '🏆'; /* Placeholder icon */
+            font-size: 1em;
         }
 
         .group-card .data-table {
@@ -448,61 +770,73 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: var(--spacing-unit);
+            padding: 1rem;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .knockout-rounds-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 3rem; /* Space between rounds */
+            padding: 1rem;
+            min-width: max-content; /* Allow horizontal scroll */
         }
 
         .knockout-round {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: var(--spacing-unit) * 2;
             position: relative;
-            width: 100%;
+            min-width: 200px; /* Minimum width for a round */
         }
 
         .knockout-round-title {
-            font-size: 1.5em;
+            font-size: 1.3rem;
             color: var(--accent-color);
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1.5rem;
             text-align: center;
             width: 100%;
+            white-space: nowrap;
         }
 
         .knockout-matches {
             display: flex;
             flex-direction: column;
-            gap: var(--spacing-unit);
+            gap: 1.5rem; /* Space between matches in a round */
             width: 100%;
-            max-width: 800px; /* Limit width for readability */
         }
 
         .knockout-match-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             position: relative;
             width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .knockout-match {
-            background-color: var(--secondary-bg);
+            background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px 15px;
+            border-radius: 0.5rem;
+            padding: 0.8rem 1rem;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 0.3rem;
             width: 100%;
-            max-width: 300px;
+            max-width: 250px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
             z-index: 1;
+            box-shadow: var(--card-shadow);
         }
 
         .knockout-match:hover {
             background-color: var(--hover-bg);
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
         }
 
         .knockout-match .team-line {
@@ -510,6 +844,7 @@
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
+            font-size: 0.95rem;
         }
 
         .knockout-match .team-name {
@@ -517,212 +852,146 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .knockout-match .score {
-            min-width: 30px;
+            min-width: 2rem;
             text-align: right;
+            color: var(--text-color);
         }
 
         .knockout-match .aggregate-score {
-            font-size: 0.8em;
+            font-size: 0.75rem;
             color: var(--light-text-color);
             text-align: center;
-            margin-top: 5px;
+            margin-top: 0.5rem;
             border-top: 1px dashed var(--border-color);
-            padding-top: 5px;
+            padding-top: 0.5rem;
         }
 
+        .knockout-match.winner {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px var(--accent-color);
+        }
         .knockout-match.winner .team-line {
             color: var(--accent-color);
         }
 
-        /* Bracket lines */
-        .bracket-line {
+        /* Bracket lines (Champions League style) */
+        .knockout-round:not(:last-child) .knockout-match-container {
+            margin-bottom: 1.5rem; /* Space for vertical line */
+        }
+        .knockout-round:not(:last-child) .knockout-match-container::after {
+            content: '';
             position: absolute;
-            background-color: var(--border-color);
+            right: -1.5rem; /* Half of gap */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1.5rem; /* Half of gap */
+            height: 2px;
+            background-color: var(--knockout-line-color);
             z-index: 0;
         }
-
-        /* Vertical line connecting matches in a round */
-        .bracket-line.vertical {
-            width: 2px;
-            height: calc(100% + var(--spacing-unit)); /* Connects center of matches */
-            left: 50%;
-            transform: translateX(-50%);
-            top: calc(-0.5 * var(--spacing-unit));
-        }
-
-        /* Horizontal line connecting to next round */
-        .bracket-line.horizontal {
-            height: 2px;
-            width: calc(var(--spacing-unit) * 2); /* Length of horizontal line */
-            right: -calc(var(--spacing-unit) * 2);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        /* Arrow for advancing team */
-        .bracket-arrow {
+        .knockout-round:not(:last-child) .knockout-match-container:nth-child(odd)::before {
+            content: '';
             position: absolute;
-            right: -20px; /* Position relative to match */
+            right: -1.5rem;
             top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 6px solid transparent;
-            border-bottom: 6px solid transparent;
-            border-left: 6px solid var(--accent-color);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 2;
+            width: 2px;
+            height: calc(100% + 1.5rem); /* Connects to next match */
+            background-color: var(--knockout-line-color);
+            z-index: 0;
+        }
+        .knockout-round:not(:last-child) .knockout-match-container:nth-child(even)::before {
+            content: '';
+            position: absolute;
+            right: -1.5rem;
+            bottom: 50%;
+            width: 2px;
+            height: calc(100% + 1.5rem);
+            background-color: var(--knockout-line-color);
+            z-index: 0;
         }
 
         .knockout-match.winner + .bracket-arrow {
             opacity: 1;
         }
 
-        /* Specific styling for World Cup single elimination */
-        .worldcup-bracket .knockout-match-container {
-            position: relative;
-            margin-bottom: var(--spacing-unit);
-        }
-
-        .worldcup-bracket .knockout-match-container::before {
-            content: '';
-            position: absolute;
-            left: -20px; /* Adjust as needed */
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background-color: var(--border-color);
-            z-index: 0;
-        }
-
-        .worldcup-bracket .knockout-match-container:nth-child(odd)::before {
-            height: calc(100% + var(--spacing-unit));
-            top: 0;
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
-        }
-
-        .worldcup-bracket .knockout-match-container:nth-child(even)::before {
-            height: calc(100% + var(--spacing-unit));
-            top: calc(-100% - var(--spacing-unit));
-            border-top-left-radius: 5px;
-            border-bottom-left-radius: 5px;
-        }
-
-        .worldcup-bracket .knockout-match-container:nth-child(odd) .knockout-match {
-            margin-left: 20px;
-        }
-        .worldcup-bracket .knockout-match-container:nth-child(even) .knockout-match {
-            margin-left: 20px;
-        }
-
-        .worldcup-bracket .knockout-match-container:nth-child(odd) .knockout-match::after {
-            content: '';
-            position: absolute;
-            left: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 2px;
-            background-color: var(--border-color);
-            z-index: 0;
-        }
-
-        .worldcup-bracket .knockout-match-container:nth-child(even) .knockout-match::after {
-            content: '';
-            position: absolute;
-            left: -20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 2px;
-            background-color: var(--border-color);
-            z-index: 0;
-        }
-
-        .worldcup-bracket .knockout-round {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: auto;
-            margin-right: var(--spacing-unit) * 4; /* Space for lines */
-        }
-
-        .worldcup-bracket .knockout-round:last-child {
-            margin-right: 0;
-        }
-
+        /* World Cup specific bracket rendering (simplified for responsiveness) */
         .worldcup-bracket .knockout-rounds-wrapper {
-            display: flex;
-            justify-content: center;
+            flex-direction: row; /* Keep horizontal flow */
             align-items: flex-start;
-            gap: var(--spacing-unit) * 4;
-            padding: var(--spacing-unit);
-            overflow-x: auto;
-            width: 100%;
+            gap: 3rem;
         }
-
-        .worldcup-bracket .knockout-match {
-            width: 250px; /* Fixed width for WC matches */
+        .worldcup-bracket .knockout-round {
+            align-items: flex-start;
+            min-width: 250px;
         }
-
         .worldcup-bracket .knockout-match-container {
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
+            justify-content: flex-start;
+        }
+        .worldcup-bracket .knockout-match {
+            max-width: none;
+            width: 250px;
+        }
+        .worldcup-bracket .knockout-match-container::before,
+        .worldcup-bracket .knockout-match-container::after {
+            display: none; /* Hide default CL lines */
+        }
+
+        /* World Cup lines (simplified) */
+        .worldcup-bracket .knockout-match-container {
             position: relative;
         }
-
-        .worldcup-bracket .knockout-match-container .bracket-connector {
+        .worldcup-bracket .knockout-match-container:not(:last-child)::after {
+            content: '';
             position: absolute;
-            left: -20px;
-            width: 20px;
-            height: 2px;
-            background-color: var(--border-color);
+            right: -1.5rem; /* Half of gap */
             top: 50%;
             transform: translateY(-50%);
+            width: 1.5rem; /* Half of gap */
+            height: 2px;
+            background-color: var(--knockout-line-color);
+            z-index: 0;
         }
-
-        .worldcup-bracket .knockout-match-container.has-next-match .bracket-connector-vertical {
+        .worldcup-bracket .knockout-match-container:nth-child(odd):not(:last-child)::before {
+            content: '';
             position: absolute;
-            left: -20px;
+            right: -1.5rem;
+            top: 50%;
             width: 2px;
-            background-color: var(--border-color);
+            height: calc(100% + 1rem); /* Connects to next match */
+            background-color: var(--knockout-line-color);
             z-index: 0;
         }
-
-        .worldcup-bracket .knockout-match-container.has-next-match:nth-child(odd) .bracket-connector-vertical {
-            top: 50%;
-            height: calc(50% + var(--spacing-unit) / 2 + 1px); /* Connects to center of next match */
-            border-bottom-left-radius: 2px;
-        }
-
-        .worldcup-bracket .knockout-match-container.has-next-match:nth-child(even) .bracket-connector-vertical {
-            bottom: 50%;
-            height: calc(50% + var(--spacing-unit) / 2 + 1px);
-            border-top-left-radius: 2px;
-        }
-
-        .worldcup-bracket .knockout-match-container.has-next-match .bracket-connector-horizontal-next {
+        .worldcup-bracket .knockout-match-container:nth-child(even):not(:last-child)::before {
+            content: '';
             position: absolute;
-            left: -20px - (var(--spacing-unit) * 2); /* Adjust based on gap */
-            width: var(--spacing-unit) * 2;
-            height: 2px;
-            background-color: var(--border-color);
+            right: -1.5rem;
+            bottom: 50%;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background-color: var(--knockout-line-color);
+            z-index: 0;
+        }
+        .worldcup-bracket .knockout-match.winner + .bracket-arrow {
+            opacity: 1;
+            position: absolute;
+            right: -2.5rem; /* Position relative to match */
             top: 50%;
             transform: translateY(-50%);
-            z-index: 0;
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 6px solid var(--knockout-arrow-color);
+            z-index: 2;
         }
 
-        .worldcup-bracket .knockout-match-container.has-next-match .bracket-arrow {
-            left: -20px - (var(--spacing-unit) * 2) - 6px; /* Arrow position */
-            right: auto;
-            transform: translateY(-50%) rotate(180deg);
-            border-left: none;
-            border-right: 6px solid var(--accent-color);
-        }
 
         /* --- Modals --- */
         .modal-overlay {
@@ -747,16 +1016,16 @@
         }
 
         .modal-content {
-            background-color: var(--primary-bg);
-            padding: var(--spacing-unit) * 1.5;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background-color: var(--modal-bg);
+            padding: 1.5rem;
+            border-radius: 0.8rem;
+            box-shadow: var(--modal-shadow);
             width: 90%;
             max-width: 700px;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            transform: translateY(-20px);
+            transform: translateY(-2rem);
             transition: transform 0.3s ease;
         }
 
@@ -768,23 +1037,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
+            padding-bottom: 0.8rem;
         }
 
         .modal-header h2 {
             margin: 0;
             color: var(--accent-color);
+            font-size: 1.5rem;
         }
 
         .modal-close-btn {
             background: none;
             border: none;
             color: var(--light-text-color);
-            font-size: 1.5em;
+            font-size: 1.8rem;
             cursor: pointer;
-            padding: 5px;
+            padding: 0.3rem;
+            line-height: 1;
         }
 
         .modal-close-btn:hover {
@@ -792,12 +1063,12 @@
         }
 
         .modal-footer {
-            margin-top: var(--spacing-unit);
-            padding-top: var(--spacing-unit);
+            margin-top: 1.5rem;
+            padding-top: 1rem;
             border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: flex-end;
-            gap: var(--spacing-unit);
+            gap: 1rem;
         }
 
         /* Match Modal Specific */
@@ -805,48 +1076,55 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin-bottom: var(--spacing-unit);
-            font-size: 1.2em;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
 
         .match-modal-teams .team-name {
             font-weight: bold;
             color: var(--text-color);
+            flex-basis: 40%;
+            text-align: right;
+        }
+        .match-modal-teams .team-name:last-child {
+            text-align: left;
         }
 
         .match-modal-teams .score-input {
-            width: 60px;
+            width: 3.5rem;
             text-align: center;
-            font-size: 1.5em;
-            padding: 5px;
+            font-size: 1.5rem;
+            padding: 0.5rem;
             background-color: var(--hover-bg);
             border: 1px solid var(--border-color);
-            border-radius: 5px;
+            border-radius: 0.3rem;
         }
 
         .match-events-section {
-            margin-top: var(--spacing-unit);
+            margin-top: 1.5rem;
             border-top: 1px solid var(--border-color);
-            padding-top: var(--spacing-unit);
+            padding-top: 1rem;
         }
 
         .match-events-list {
             list-style: none;
             padding: 0;
             margin: 0;
-            max-height: 200px;
+            max-height: 12rem;
             overflow-y: auto;
             border: 1px solid var(--border-color);
-            border-radius: 5px;
-            margin-bottom: var(--spacing-unit);
+            border-radius: 0.3rem;
+            margin-bottom: 1rem;
+            background-color: var(--input-bg);
         }
 
         .match-events-list li {
-            padding: 8px 12px;
+            padding: 0.6rem 0.8rem;
             border-bottom: 1px dashed var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 0.9rem;
         }
 
         .match-events-list li:last-child {
@@ -863,7 +1141,7 @@
             color: var(--error-color);
             font-size: 1em;
             cursor: pointer;
-            padding: 5px;
+            padding: 0.3rem;
         }
 
         .match-events-list li .event-actions button:hover {
@@ -877,196 +1155,366 @@
 
         .player-select-group {
             display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 10px;
+            gap: 0.8rem;
+            align-items: flex-end;
+            margin-bottom: 1rem;
         }
-
-        .player-select-group select {
+        .player-select-group > div {
             flex-grow: 1;
-        }
-
-        .player-select-group input[type="number"] {
-            width: 60px;
-            flex-shrink: 0;
         }
 
         /* Player Stats */
         .player-stats-leaderboard {
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
         }
 
         .player-stats-leaderboard h3 {
             color: var(--info-color);
-            margin-bottom: var(--spacing-unit);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .player-stats-leaderboard h3::before {
+            content: '⭐'; /* Placeholder icon */
+            font-size: 1em;
         }
 
         .player-stats-leaderboard .data-table th:first-child,
         .player-stats-leaderboard .data-table td:first-child {
-            width: 30px;
+            width: 2rem;
             text-align: center;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
+        /* Floating Action Buttons (FABs) */
+        .fab-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            z-index: 900;
+        }
+
+        .fab-button {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--fab-shadow);
+            background-color: var(--fab-bg);
+            color: var(--fab-text);
+            transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .fab-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+        }
+        .fab-button span {
+            display: none; /* Text hidden by default */
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            white-space: nowrap;
+        }
+        .fab-button:hover span {
+            display: inline; /* Show text on hover */
+        }
+        .fab-button.expanded {
+            width: auto;
+            padding: 0.8rem 1.2rem;
+            border-radius: 2rem;
+        }
+        .fab-button.expanded span {
+            display: inline;
+        }
+
+        /* Tooltips */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-0.5rem);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.5rem 0.8rem;
+            border-radius: 0.3rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 1001;
+        }
+        [data-tooltip]:hover::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-0.8rem);
+        }
+
+        /* --- Responsive Design --- */
+        /* Mobile (Small phones, <480px) */
+        @media (max-width: 480px) {
             body {
-                flex-direction: column;
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
             }
-
+            #header-bar {
+                padding: 0.5rem 1rem;
+            }
+            .hamburger-menu {
+                display: block;
+            }
             #sidebar {
+                position: fixed;
+                top: 3.5rem; /* Below header */
+                left: 0;
                 width: 100%;
-                height: auto;
-                position: relative;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-                padding-bottom: 0;
+                height: calc(100vh - 3.5rem);
+                transform: translateX(-100%);
+                box-shadow: none;
+                padding-top: 1rem;
             }
-
-            #sidebar h2 {
-                margin-bottom: var(--spacing-unit);
+            #sidebar.active {
+                transform: translateX(0);
             }
-
-            #sidebar nav ul {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 5px;
-                border-bottom: 1px solid var(--border-color);
-                padding-bottom: var(--spacing-unit);
-            }
-
-            #sidebar nav ul li {
-                margin-bottom: 0;
-            }
-
-            #sidebar nav ul li a, .sidebar-item {
-                padding: 8px 12px;
-                font-size: 0.9em;
-            }
-
-            .sidebar-section-title {
-                display: none; /* Hide section titles on small screens */
-            }
-
-            .sidebar-tournament-list {
-                max-height: 150px;
-                border-top: none;
-                padding-top: 0;
-                margin-bottom: var(--spacing-unit);
-            }
-
             #main-content {
-                padding: var(--spacing-unit);
+                grid-column: 1;
+                padding: 1rem;
             }
-
             #tournament-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: var(--spacing-unit);
+                gap: 0.8rem;
             }
-
             #tournament-header h1 {
-                font-size: 1.5em;
+                font-size: 1.5rem;
             }
-
             #tournament-tabs {
                 overflow-x: auto;
                 white-space: nowrap;
                 justify-content: initial;
+                flex-wrap: nowrap;
             }
-
             .tab-button {
                 flex-shrink: 0;
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
             }
-
             .grid-2-col, .grid-3-col, .grid-4-col {
                 grid-template-columns: 1fr;
             }
-
-            .fixture-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
+            .fixture-list {
+                grid-template-columns: 1fr;
             }
-
-            .fixture-item .match-info {
-                flex-direction: row;
+            .fixture-item .match-teams {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+            .fixture-item .team-display {
                 width: 100%;
                 justify-content: space-between;
             }
-
-            .fixture-item .team-name {
-                text-align: left;
-                flex-basis: auto;
+            .fixture-item .team-display.away {
+                flex-direction: row; /* Keep order for better readability on small screens */
             }
-
-            .fixture-item .team-name.away {
-                text-align: right;
+            .fixture-item .score {
+                order: 2; /* Score after team name */
             }
-
-            .fixture-item .date-time {
+            .fixture-item .vs {
+                display: none; /* Hide 'vs' on very small screens */
+            }
+            .match-modal-teams {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            .match-modal-teams .team-name {
+                text-align: center;
                 width: 100%;
-                text-align: left;
             }
-
-            .fixture-item .status-badge {
-                margin-left: 0;
-                margin-top: 5px;
+            .match-modal-teams .score-input {
+                width: 4rem;
             }
-
-            .knockout-bracket {
-                padding: var(--spacing-unit) 0;
+            .player-select-group {
+                flex-direction: column;
+                align-items: stretch;
             }
-
+            .fab-container {
+                bottom: 1rem;
+                right: 1rem;
+            }
+            .fab-button {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.2rem;
+            }
+            .fab-button.expanded {
+                padding: 0.6rem 1rem;
+            }
+            .knockout-rounds-wrapper {
+                flex-direction: column;
+                gap: 2rem;
+                min-width: auto;
+                width: 100%;
+            }
             .knockout-round {
+                min-width: auto;
                 width: 100%;
-                margin-bottom: var(--spacing-unit);
             }
-
             .knockout-match {
                 max-width: none;
             }
-
-            .worldcup-bracket .knockout-rounds-wrapper {
-                flex-direction: column;
-                gap: var(--spacing-unit);
-            }
-
-            .worldcup-bracket .knockout-round {
-                width: 100%;
-                align-items: center;
-                margin-right: 0;
-            }
-
-            .worldcup-bracket .knockout-match {
-                width: 100%;
-                margin-left: 0;
-            }
-
-            .worldcup-bracket .knockout-match-container::before,
-            .worldcup-bracket .knockout-match-container .bracket-connector,
-            .worldcup-bracket .knockout-match-container .bracket-connector-vertical,
-            .worldcup-bracket .knockout-match-container .bracket-connector-horizontal-next,
-            .worldcup-bracket .knockout-match-container .bracket-arrow,
-            .worldcup-bracket .knockout-match-container:nth-child(odd) .knockout-match::after,
-            .worldcup-bracket .knockout-match-container:nth-child(even) .knockout-match::after {
+            .knockout-round:not(:last-child) .knockout-match-container::after,
+            .knockout-round:not(:last-child) .knockout-match-container::before,
+            .worldcup-bracket .knockout-match-container:not(:last-child)::after,
+            .worldcup-bracket .knockout-match-container:nth-child(odd):not(:last-child)::before,
+            .worldcup-bracket .knockout-match-container:nth-child(even):not(:last-child)::before,
+            .worldcup-bracket .knockout-match.winner + .bracket-arrow {
                 display: none; /* Hide complex bracket lines on small screens */
+            }
+        }
+
+        /* Tablet (481px - 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            .hamburger-menu {
+                display: block;
+            }
+            #sidebar {
+                position: fixed;
+                top: 3.5rem;
+                left: 0;
+                width: 250px;
+                height: calc(100vh - 3.5rem);
+                transform: translateX(-100%);
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            }
+            #sidebar.active {
+                transform: translateX(0);
+            }
+            #main-content {
+                grid-column: 1;
+                padding: 1.5rem;
+            }
+            #tournament-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            #tournament-tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+                justify-content: initial;
+                flex-wrap: nowrap;
+            }
+            .grid-2-col, .grid-3-col, .grid-4-col {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+            }
+            .fixture-list {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+            }
+            .knockout-rounds-wrapper {
+                gap: 2rem;
+            }
+        }
+
+        /* Desktop (769px - 1439px) */
+        @media (min-width: 769px) and (max-width: 1439px) {
+            body {
+                grid-template-columns: var(--sidebar-width) 1fr;
+            }
+            #header-bar {
+                grid-column: 1 / -1;
+            }
+            #sidebar {
+                grid-column: 1;
+                grid-row: 2;
+                transform: translateX(0); /* Always visible */
+            }
+            #main-content {
+                grid-column: 2;
+                grid-row: 2;
+                padding: 2rem;
+            }
+            .hamburger-menu {
+                display: none;
+            }
+            .grid-3-col {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+            }
+            .grid-4-col {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+            }
+            .knockout-rounds-wrapper {
+                gap: 3rem;
+            }
+        }
+
+        /* Ultrawide (>=1440px) */
+        @media (min-width: 1440px) {
+            body {
+                grid-template-columns: var(--sidebar-width) 1fr;
+            }
+            #header-bar {
+                grid-column: 1 / -1;
+            }
+            #sidebar {
+                grid-column: 1;
+                grid-row: 2;
+                transform: translateX(0); /* Always visible */
+            }
+            #main-content {
+                grid-column: 2;
+                grid-row: 2;
+                max-width: 1600px; /* Limit content width */
+                margin: 0 auto;
+                padding: 2rem 3rem;
+            }
+            .hamburger-menu {
+                display: none;
+            }
+            .grid-3-col {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .grid-4-col {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .knockout-rounds-wrapper {
+                gap: 4rem;
             }
         }
     </style>
 </head>
-<body>
+<body class="dark-mode">
+    <header id="header-bar">
+        <button class="hamburger-menu" aria-label="Toggle navigation menu">☰</button>
+        <div class="logo">⚽ Tournament <span>Manager</span></div>
+        <button class="theme-toggle" aria-label="Toggle dark/light mode">💡</button>
+    </header>
+
     <aside id="sidebar">
         <h2>Tournament Manager</h2>
         <nav>
             <ul>
-                <li><a href="#" class="sidebar-item" data-view="home">Home</a></li>
-                <li><a href="#" class="sidebar-item" data-view="create-tournament">Create New Tournament</a></li>
+                <li><a href="#" class="sidebar-item" data-view="home"><span role="img" aria-label="Home">🏠</span> Home</a></li>
+                <li><a href="#" class="sidebar-item" data-view="create-tournament"><span role="img" aria-label="Create">✨</span> Create New Tournament</a></li>
             </ul>
             <div class="sidebar-section-title">Tournament Modes</div>
             <ul>
-                <li><a href="#" class="sidebar-item" data-mode="league">League</a></li>
-                <li><a href="#" class="sidebar-item" data-mode="champions">Champions League</a></li>
-                <li><a href="#" class="sidebar-item" data-mode="worldcup">World Cup</a></li>
+                <li><a href="#" class="sidebar-item" data-mode="league"><span role="img" aria-label="League">🏆</span> League</a></li>
+                <li><a href="#" class="sidebar-item" data-mode="champions"><span role="img" aria-label="Champions League">⭐</span> Champions League</a></li>
+                <li><a href="#" class="sidebar-item" data-mode="worldcup"><span role="img" aria-label="World Cup">🌍</span> World Cup</a></li>
             </ul>
             <div class="sidebar-section-title">Your Tournaments</div>
             <ul id="tournament-list" class="sidebar-tournament-list">
@@ -1074,9 +1522,9 @@
             </ul>
             <div class="sidebar-section-title">Data Management</div>
             <ul>
-                <li><a href="#" class="sidebar-item" id="export-data-btn">Export All Data</a></li>
-                <li><a href="#" class="sidebar-item" id="import-data-btn">Import Data</a></li>
-                <li><a href="#" class="sidebar-item" id="seed-demo-data-btn">Seed Demo Data</a></li>
+                <li><a href="#" class="sidebar-item" id="export-data-btn"><span role="img" aria-label="Export">📤</span> Export All Data</a></li>
+                <li><a href="#" class="sidebar-item" id="import-data-btn"><span role="img" aria-label="Import">📥</span> Import Data</a></li>
+                <li><a href="#" class="sidebar-item" id="seed-demo-data-btn"><span role="img" aria-label="Seed">🌱</span> Seed Demo Data</a></li>
             </ul>
         </nav>
     </aside>
@@ -1132,12 +1580,12 @@
             </div>
 
             <div id="tournament-tabs">
-                <button class="tab-button active" data-tab="overview">Overview</button>
-                <button class="tab-button" data-tab="fixtures">Fixtures</button>
-                <button class="tab-button" data-tab="standings">Standings</button>
-                <button class="tab-button" data-tab="player-stats">Player Stats</button>
-                <button class="tab-button" data-tab="knockout">Knockout</button>
-                <button class="tab-button" data-tab="manage">Manage</button>
+                <button class="tab-button active" data-tab="overview"><span role="img" aria-label="Overview">📊</span> Overview</button>
+                <button class="tab-button" data-tab="fixtures"><span role="img" aria-label="Fixtures">🗓️</span> Fixtures</button>
+                <button class="tab-button" data-tab="standings"><span role="img" aria-label="Standings">📈</span> Standings</button>
+                <button class="tab-button" data-tab="player-stats"><span role="img" aria-label="Player Stats">👤</span> Player Stats</button>
+                <button class="tab-button" data-tab="knockout"><span role="img" aria-label="Knockout">🥊</span> Knockout</button>
+                <button class="tab-button" data-tab="manage"><span role="img" aria-label="Manage">⚙️</span> Manage</button>
             </div>
 
             <div id="overview-tab" class="tab-content active">
@@ -1150,7 +1598,7 @@
                 </div>
                 <div id="overview-next-fixtures" class="card">
                     <h3>Upcoming Fixtures</h3>
-                    <div class="fixture-list">
+                    <div class="fixture-list single-column">
                         <!-- Next fixtures will be loaded here -->
                     </div>
                 </div>
@@ -1165,7 +1613,7 @@
                             <option value="">All Teams</option>
                         </select>
                     </div>
-                    <button id="simulate-all-fixtures-btn" class="btn">Simulate All Remaining</button>
+                    <button id="simulate-all-fixtures-btn" class="btn" data-tooltip="Simulate all remaining matches with random scores."><span role="img" aria-label="Simulate">🎲</span> Simulate All Remaining</button>
                 </div>
                 <div id="fixtures-list" class="fixture-list">
                     <!-- Fixtures will be loaded here -->
@@ -1177,7 +1625,7 @@
                 <div id="standings-container">
                     <!-- Standings tables will be loaded here -->
                 </div>
-                <button id="export-standings-csv-btn" class="btn mt-1">Export Standings as CSV</button>
+                <button id="export-standings-csv-btn" class="btn mt-1" data-tooltip="Download current standings as a CSV file."><span role="img" aria-label="Export CSV">📄</span> Export Standings as CSV</button>
             </div>
 
             <div id="player-stats-tab" class="tab-content">
@@ -1192,59 +1640,67 @@
                 </div>
                 <div class="grid-2-col">
                     <div class="player-stats-leaderboard card">
-                        <h3>Top Scorers</h3>
-                        <table class="data-table" id="top-scorers-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Player</th>
-                                    <th>Team</th>
-                                    <th class="text-right">Goals</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <h3><span role="img" aria-label="Goals">⚽</span> Top Scorers</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="top-scorers-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Player</th>
+                                        <th>Team</th>
+                                        <th class="text-right">Goals</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="player-stats-leaderboard card">
-                        <h3>Top Assists</h3>
-                        <table class="data-table" id="top-assists-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Player</th>
-                                    <th>Team</th>
-                                    <th class="text-right">Assists</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <h3><span role="img" aria-label="Assists">👟</span> Top Assists</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="top-assists-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Player</th>
+                                        <th>Team</th>
+                                        <th class="text-right">Assists</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="player-stats-leaderboard card">
-                        <h3>Most Yellow Cards</h3>
-                        <table class="data-table" id="top-yellow-cards-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Player</th>
-                                    <th>Team</th>
-                                    <th class="text-right">Yellow</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <h3><span role="img" aria-label="Yellow Card">🟨</span> Most Yellow Cards</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="top-yellow-cards-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Player</th>
+                                        <th>Team</th>
+                                        <th class="text-right">Yellow</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="player-stats-leaderboard card">
-                        <h3>Most Red Cards</h3>
-                        <table class="data-table" id="top-red-cards-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Player</th>
-                                    <th>Team</th>
-                                    <th class="text-right">Red</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
+                        <h3><span role="img" aria-label="Red Card">🟥</span> Most Red Cards</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="top-red-cards-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Player</th>
+                                        <th>Team</th>
+                                        <th class="text-right">Red</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1264,12 +1720,12 @@
                     <div id="tournament-settings-form">
                         <!-- Mode-specific settings will be loaded here -->
                     </div>
-                    <button id="save-tournament-settings-btn" class="btn mt-1">Save Settings</button>
+                    <button id="save-tournament-settings-btn" class="btn mt-1"><span role="img" aria-label="Save">💾</span> Save Settings</button>
                 </div>
 
                 <div class="card mb-2">
                     <h3>Teams</h3>
-                    <div id="team-list-container">
+                    <div id="team-list-container" class="table-responsive">
                         <table class="data-table" id="manage-teams-table">
                             <thead>
                                 <tr>
@@ -1284,25 +1740,32 @@
                             </tbody>
                         </table>
                     </div>
-                    <button id="add-team-btn" class="btn mt-1">Add Team</button>
-                    <button id="draw-groups-btn" class="btn mt-1" style="display: none;">Draw Groups</button>
-                    <button id="generate-fixtures-btn" class="btn mt-1" style="display: none;">Generate Fixtures</button>
+                    <button id="add-team-btn" class="btn mt-1"><span role="img" aria-label="Add Team">➕</span> Add Team</button>
+                    <button id="draw-groups-btn" class="btn mt-1" style="display: none;" data-tooltip="Randomly assign teams to groups."><span role="img" aria-label="Draw Groups">🎲</span> Draw Groups</button>
+                    <button id="generate-fixtures-btn" class="btn mt-1" style="display: none;" data-tooltip="Generate all matches for the tournament."><span role="img" aria-label="Generate Fixtures">🗓️</span> Generate Fixtures</button>
                 </div>
 
                 <div class="card">
                     <h3>Danger Zone</h3>
-                    <button id="reset-tournament-btn" class="btn" style="background-color: var(--error-color);">Reset This Tournament</button>
+                    <button id="reset-tournament-btn" class="btn" style="background-color: var(--error-color);" data-tooltip="Permanently delete this tournament and all its data."><span role="img" aria-label="Reset">⚠️</span> Reset This Tournament</button>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <button class="fab-button" id="fab-add-team" style="display: none;" data-tooltip="Add a new team"><span role="img" aria-label="Add Team">➕</span><span>Add Team</span></button>
+        <button class="fab-button" id="fab-simulate-matchday" style="display: none;" data-tooltip="Simulate next matchday"><span role="img" aria-label="Simulate Matchday">⏩</span><span>Simulate Matchday</span></button>
+        <button class="fab-button" id="fab-export-data" data-tooltip="Export all app data"><span role="img" aria-label="Export Data">📤</span><span>Export Data</span></button>
+    </div>
 
     <!-- Modals -->
     <div id="match-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="match-modal-title">Match Details</h2>
-                <button class="modal-close-btn" data-close-modal="match-modal">&times;</button>
+                <button class="modal-close-btn" data-close-modal="match-modal" aria-label="Close match details modal">&times;</button>
             </div>
             <div class="modal-body">
                 <p class="text-center" id="match-modal-date"></p>
@@ -1314,9 +1777,9 @@
                     <span id="match-modal-away-team" class="team-name"></span>
                 </div>
                 <div class="flex-row justify-center mb-1">
-                    <button id="match-modal-simulate-btn" class="btn">Simulate Score</button>
-                    <button id="match-modal-extra-time-btn" class="btn" style="display: none;">Add Extra Time</button>
-                    <button id="match-modal-penalties-btn" class="btn" style="display: none;">Add Penalties</button>
+                    <button id="match-modal-simulate-btn" class="btn" data-tooltip="Generate random scores for this match."><span role="img" aria-label="Simulate">🎲</span> Simulate Score</button>
+                    <button id="match-modal-extra-time-btn" class="btn" style="display: none;"><span role="img" aria-label="Extra Time">⏱️</span> Add Extra Time</button>
+                    <button id="match-modal-penalties-btn" class="btn" style="display: none;"><span role="img" aria-label="Penalties">🥅</span> Add Penalties</button>
                 </div>
 
                 <div id="match-modal-extra-time-section" style="display: none;">
@@ -1362,19 +1825,19 @@
                         </div>
                     </div>
                     <div class="player-select-group">
-                        <div class="form-group" style="flex-grow: 1;">
+                        <div class="form-group">
                             <label for="event-player-team">Team:</label>
                             <select id="event-player-team">
                                 <!-- Teams will be loaded here -->
                             </select>
                         </div>
-                        <div class="form-group" style="flex-grow: 2;">
+                        <div class="form-group">
                             <label for="event-player">Player:</label>
                             <select id="event-player">
                                 <!-- Players will be loaded here -->
                             </select>
                         </div>
-                        <div class="form-group" style="flex-grow: 2;" id="event-assist-player-group">
+                        <div class="form-group" id="event-assist-player-group">
                             <label for="event-assist-player">Assisted By:</label>
                             <select id="event-assist-player">
                                 <option value="">None</option>
@@ -1382,12 +1845,12 @@
                             </select>
                         </div>
                     </div>
-                    <button id="add-event-btn" class="btn">Add Event</button>
+                    <button id="add-event-btn" class="btn"><span role="img" aria-label="Add Event">➕</span> Add Event</button>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn" data-close-modal="match-modal">Cancel</button>
-                <button id="match-modal-save-btn" class="btn">Save Result</button>
+                <button id="match-modal-save-btn" class="btn"><span role="img" aria-label="Save">💾</span> Save Result</button>
             </div>
         </div>
     </div>
@@ -1396,7 +1859,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="team-modal-title">Add/Edit Team</h2>
-                <button class="modal-close-btn" data-close-modal="team-modal">&times;</button>
+                <button class="modal-close-btn" data-close-modal="team-modal" aria-label="Close team modal">&times;</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="team-modal-id">
@@ -1423,7 +1886,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-close-modal="team-modal">Cancel</button>
-                <button id="team-modal-save-btn" class="btn">Save Team</button>
+                <button id="team-modal-save-btn" class="btn"><span role="img" aria-label="Save">💾</span> Save Team</button>
             </div>
         </div>
     </div>
@@ -1432,24 +1895,26 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="player-modal-title">Manage Players for <span id="player-modal-team-name"></span></h2>
-                <button class="modal-close-btn" data-close-modal="player-modal">&times;</button>
+                <button class="modal-close-btn" data-close-modal="player-modal" aria-label="Close player modal">&times;</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="player-modal-team-id">
                 <h3>Current Players</h3>
-                <table class="data-table" id="manage-players-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Players will be listed here -->
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="data-table" id="manage-players-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Players will be listed here -->
+                        </tbody>
+                    </table>
+                </div>
                 <h3 class="mt-1">Add New Player</h3>
                 <input type="hidden" id="edit-player-id">
                 <div class="form-group">
@@ -1467,7 +1932,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-close-modal="player-modal">Done</button>
-                <button id="player-modal-add-edit-btn" class="btn">Add Player</button>
+                <button id="player-modal-add-edit-btn" class="btn"><span role="img" aria-label="Add Player">➕</span> Add Player</button>
             </div>
         </div>
     </div>
@@ -1480,6 +1945,7 @@
         // --- Data Management ---
         app.data = {
             localStorageKey: 'football_manager_v1',
+            themeKey: 'football_manager_v1_theme',
             state: {
                 tournaments: [],
                 teams: {}, // { teamId: { id, name, ... }, ... }
@@ -1490,6 +1956,7 @@
             },
             currentTournamentId: null,
             uniqueIdCounter: 0,
+            darkModeEnabled: true, // Default to dark mode
 
             generateUniqueId() {
                 return `id_${Date.now()}_${app.data.uniqueIdCounter++}`;
@@ -1524,6 +1991,18 @@
                 }
                 console.log('No state found in localStorage.');
                 return false;
+            },
+
+            saveThemePreference() {
+                localStorage.setItem(app.data.themeKey, JSON.stringify({ darkModeEnabled: app.data.darkModeEnabled }));
+            },
+
+            loadThemePreference() {
+                const savedTheme = localStorage.getItem(app.data.themeKey);
+                if (savedTheme) {
+                    const themeData = JSON.parse(savedTheme);
+                    app.data.darkModeEnabled = themeData.darkModeEnabled;
+                }
             },
 
             resetTournament(tournamentId) {
@@ -1624,6 +2103,10 @@
         // --- UI Management ---
         app.ui = {
             elements: {
+                body: document.body,
+                headerBar: document.getElementById('header-bar'),
+                hamburgerMenu: document.querySelector('.hamburger-menu'),
+                themeToggle: document.querySelector('.theme-toggle'),
                 sidebar: document.getElementById('sidebar'),
                 mainContent: document.getElementById('main-content'),
                 tournamentList: document.getElementById('tournament-list'),
@@ -1732,6 +2215,11 @@
                 exportDataBtn: document.getElementById('export-data-btn'),
                 importDataBtn: document.getElementById('import-data-btn'),
                 seedDemoDataBtn: document.getElementById('seed-demo-data-btn'),
+
+                // FABs
+                fabAddTeam: document.getElementById('fab-add-team'),
+                fabSimulateMatchday: document.getElementById('fab-simulate-matchday'),
+                fabExportData: document.getElementById('fab-export-data'),
             },
             currentActiveTab: 'overview',
             currentMatchFixtureId: null, // Used for match modal context
@@ -1739,13 +2227,25 @@
 
             init() {
                 this.bindGlobalEventListeners();
+                this.applyDarkModePreference();
             },
 
             bindGlobalEventListeners() {
+                // Hamburger menu toggle
+                this.elements.hamburgerMenu.addEventListener('click', () => this.toggleSidebar());
+
+                // Theme toggle
+                this.elements.themeToggle.addEventListener('click', () => this.toggleDarkMode());
+
                 // Sidebar navigation
                 this.elements.sidebar.addEventListener('click', (e) => {
                     const target = e.target.closest('.sidebar-item');
                     if (!target) return;
+
+                    // Close sidebar on mobile after selection
+                    if (window.innerWidth <= 768) {
+                        this.toggleSidebar(false);
+                    }
 
                     // Remove active class from all sidebar items
                     document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
@@ -1821,7 +2321,7 @@
                 this.elements.matchModalPenaltiesBtn.addEventListener('click', () => this.togglePenaltiesInput(true));
                 this.elements.eventPlayerTeam.addEventListener('change', () => this.populatePlayerSelect(this.elements.eventPlayerTeam.value, this.elements.eventPlayer));
                 this.elements.eventType.addEventListener('change', () => {
-                    this.elements.eventAssistPlayerGroup.style.display = (this.elements.eventType.value === 'goal') ? 'block' : 'none';
+                    this.elements.eventAssistPlayerGroup.style.display = (this.elements.eventType.value === 'goal') ? 'flex' : 'none';
                 });
                 this.elements.addEventBtn.addEventListener('click', () => this.addEventToMatchModal());
                 this.elements.matchModalSaveBtn.addEventListener('click', () => this.saveMatchResultFromModal());
@@ -1863,6 +2363,57 @@
 
                 // Export standings CSV
                 this.elements.exportStandingsCsvBtn.addEventListener('click', () => app.logic.exportStandingsAsCsv(app.data.currentTournamentId));
+
+                // FABs
+                this.elements.fabAddTeam.addEventListener('click', () => this.showTeamModal());
+                this.elements.fabSimulateMatchday.addEventListener('click', () => {
+                    if (confirm('Are you sure you want to simulate all remaining fixtures for the current tournament? This cannot be undone.')) {
+                        app.logic.simulateAllRemainingFixtures(app.data.currentTournamentId);
+                        this.renderCurrentTournamentView();
+                    }
+                });
+                this.elements.fabExportData.addEventListener('click', () => app.data.exportState());
+            },
+
+            toggleSidebar(forceState = null) {
+                const isActive = this.elements.sidebar.classList.contains('active');
+                if (forceState === true) {
+                    this.elements.sidebar.classList.add('active');
+                } else if (forceState === false) {
+                    this.elements.sidebar.classList.remove('active');
+                } else {
+                    this.elements.sidebar.classList.toggle('active');
+                }
+            },
+
+            toggleDarkMode() {
+                app.data.darkModeEnabled = !app.data.darkModeEnabled;
+                this.applyDarkModePreference();
+                app.data.saveThemePreference();
+            },
+
+            applyDarkModePreference() {
+                if (app.data.darkModeEnabled) {
+                    document.documentElement.classList.add('dark-mode');
+                    document.documentElement.classList.remove('light-mode');
+                    this.elements.themeToggle.textContent = '💡'; // Lightbulb icon
+                } else {
+                    document.documentElement.classList.remove('dark-mode');
+                    document.documentElement.classList.add('light-mode');
+                    this.elements.themeToggle.textContent = '🌙'; // Moon icon
+                }
+                // Re-apply tournament theme to ensure correct accent colors
+                if (app.data.currentTournamentId) {
+                    const tournament = app.data.getTournament(app.data.currentTournamentId);
+                    if (tournament) {
+                        this.applyTournamentTheme(tournament.mode);
+                    }
+                }
+            },
+
+            applyTournamentTheme(mode) {
+                document.documentElement.classList.remove('league-theme', 'champions-theme', 'worldcup-theme');
+                document.documentElement.classList.add(`${mode}-theme`);
             },
 
             showModal(modalId) {
@@ -1879,6 +2430,8 @@
                 app.data.currentTournamentId = null;
                 document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
                 document.querySelector('[data-view="home"]').classList.add('active');
+                this.applyTournamentTheme('default'); // Reset to default theme
+                this.updateFabVisibility();
             },
 
             showCreateTournamentModal(mode = 'league') {
@@ -1888,6 +2441,8 @@
                 app.data.currentTournamentId = null;
                 document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
                 document.querySelector('[data-view="create-tournament"]').classList.add('active');
+                this.applyTournamentTheme('default'); // Reset to default theme
+                this.updateFabVisibility();
             },
 
             showTournamentView(tournamentId = app.data.currentTournamentId) {
@@ -1901,7 +2456,10 @@
 
                 // Update sidebar active state
                 document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-                document.querySelector(`.sidebar-item[data-tournament-id="${tournamentId}"]`).classList.add('active');
+                const activeSidebarItem = document.querySelector(`.sidebar-item[data-tournament-id="${tournamentId}"]`);
+                if (activeSidebarItem) {
+                    activeSidebarItem.classList.add('active');
+                }
 
                 // Activate the last active tab or default to overview
                 document.querySelectorAll('#tournament-tabs .tab-button').forEach(btn => btn.classList.remove('active'));
@@ -1917,7 +2475,12 @@
                     document.getElementById('overview-tab').classList.add('active');
                 }
 
+                const tournament = app.data.getTournament(tournamentId);
+                if (tournament) {
+                    this.applyTournamentTheme(tournament.mode);
+                }
                 this.renderCurrentTournamentView();
+                this.updateFabVisibility();
             },
 
             renderSidebar() {
@@ -1927,7 +2490,8 @@
                 const modes = {
                     'league': 'League',
                     'champions': 'Champions League',
-                    'worldcup': 'World Cup'
+                    'worldcup': 'World Cup',
+                    'default': 'Default' // For home/create views
                 };
 
                 app.data.state.tournaments.forEach(tournament => {
@@ -1936,13 +2500,22 @@
                     a.href = '#';
                     a.classList.add('sidebar-item');
                     a.dataset.tournamentId = tournament.id;
-                    a.textContent = `${tournament.name} (${modes[tournament.mode]})`;
+                    a.innerHTML = `<span role="img" aria-label="${modes[tournament.mode]}">${this.getModeIcon(tournament.mode)}</span> ${tournament.name}`;
                     if (app.data.currentTournamentId === tournament.id) {
                         a.classList.add('active');
                     }
                     li.appendChild(a);
                     tournamentList.appendChild(li);
                 });
+            },
+
+            getModeIcon(mode) {
+                switch (mode) {
+                    case 'league': return '🏆';
+                    case 'champions': return '⭐';
+                    case 'worldcup': return '🌍';
+                    default: return '⚽';
+                }
             },
 
             renderCurrentTournamentView() {
@@ -1952,11 +2525,11 @@
                     return;
                 }
 
-                this.elements.currentTournamentName.textContent = tournament.name;
+                this.elements.currentTournamentName.innerHTML = `${this.getModeIcon(tournament.mode)} ${tournament.name}`;
                 this.renderTournamentActions(tournament);
 
                 // Show/hide knockout tab based on mode
-                this.elements.knockoutTab.style.display = (tournament.mode === 'champions' || tournament.mode === 'worldcup') ? 'block' : 'none';
+                this.elements.knockoutTab.style.display = (tournament.mode === 'champions' || tournament.mode === 'worldcup') ? 'flex' : 'none';
 
                 switch (this.currentActiveTab) {
                     case 'overview': this.renderOverview(); break;
@@ -1966,6 +2539,7 @@
                     case 'knockout': this.renderKnockoutBracket(); break;
                     case 'manage': this.renderManageSection(); break;
                 }
+                this.updateFabVisibility();
             },
 
             renderTournamentActions(tournament) {
@@ -1979,7 +2553,7 @@
                     if (teams.length >= 2 && fixtures.length === 0) {
                         const btn = document.createElement('button');
                         btn.classList.add('btn');
-                        btn.textContent = 'Generate Fixtures';
+                        btn.innerHTML = '<span role="img" aria-label="Generate Fixtures">🗓️</span> Generate Fixtures';
                         btn.addEventListener('click', () => this.generateFixtures());
                         actionsDiv.appendChild(btn);
                     }
@@ -1987,13 +2561,13 @@
                     if (teams.length >= tournament.config.numGroups * tournament.config.groupSize && !tournament.groups) {
                         const btn = document.createElement('button');
                         btn.classList.add('btn');
-                        btn.textContent = 'Draw Groups';
+                        btn.innerHTML = '<span role="img" aria-label="Draw Groups">🎲</span> Draw Groups';
                         btn.addEventListener('click', () => this.drawGroups());
                         actionsDiv.appendChild(btn);
                     } else if (tournament.groups && fixtures.length === 0) {
                         const btn = document.createElement('button');
                         btn.classList.add('btn');
-                        btn.textContent = 'Generate Fixtures';
+                        btn.innerHTML = '<span role="img" aria-label="Generate Fixtures">🗓️</span> Generate Fixtures';
                         btn.addEventListener('click', () => this.generateFixtures());
                         actionsDiv.appendChild(btn);
                     }
@@ -2091,13 +2665,23 @@
                 const dateTime = fixture.date ? new Date(fixture.date).toLocaleString([], dateOptions) : 'TBD';
 
                 item.innerHTML = `
-                    <div class="match-info">
-                        <span class="team-name">${homeTeam ? homeTeam.name : 'TBD'}</span>
-                        <span class="score">${scoreDisplay}</span>
-                        <span class="team-name away">${awayTeam ? awayTeam.name : 'TBD'}</span>
+                    <div class="match-header">
+                        <span>${dateTime}</span>
+                        <span class="status-badge ${fixture.status}">${fixture.status}</span>
                     </div>
-                    <span class="date-time">${dateTime}</span>
-                    <span class="status-badge ${fixture.status}">${fixture.status}</span>
+                    <div class="match-teams">
+                        <div class="team-display">
+                            <span class="team-logo-placeholder" style="background: ${homeTeam?.primaryColor || '#ccc'};"></span>
+                            <span class="team-name">${homeTeam ? homeTeam.name : 'TBD'}</span>
+                        </div>
+                        <span class="score">${fixture.status === 'played' ? fixture.score.home : ''}</span>
+                        <span class="vs">-</span>
+                        <span class="score">${fixture.status === 'played' ? fixture.score.away : ''}</span>
+                        <div class="team-display away">
+                            <span class="team-name">${awayTeam ? awayTeam.name : 'TBD'}</span>
+                            <span class="team-logo-placeholder" style="background: ${awayTeam?.primaryColor || '#ccc'};"></span>
+                        </div>
+                    </div>
                 `;
                 return item;
             },
@@ -2116,18 +2700,24 @@
                         this.elements.standingsContainer.innerHTML = '<p class="text-center">Groups not drawn yet. Go to "Manage" to draw groups.</p>';
                         return;
                     }
+                    const groupGrid = document.createElement('div');
+                    groupGrid.classList.add('grid-2-col'); // Or grid-3-col depending on number of groups
                     for (const groupId in tournament.groups) {
                         const groupStandings = app.logic.calculateStandings(tournament.id, groupId);
                         const groupCard = document.createElement('div');
                         groupCard.classList.add('group-card');
                         groupCard.innerHTML = `<h3>Group ${groupId}</h3>`;
                         groupCard.appendChild(this.createStandingsTable(groupStandings, 2)); // Top 2 advance
-                        this.elements.standingsContainer.appendChild(groupCard);
+                        groupGrid.appendChild(groupCard);
                     }
+                    this.elements.standingsContainer.appendChild(groupGrid);
                 }
             },
 
             createStandingsTable(standings, advanceRelegateCount = 0) {
+                const tableResponsive = document.createElement('div');
+                tableResponsive.classList.add('table-responsive');
+
                 const table = document.createElement('table');
                 table.classList.add('data-table');
                 table.innerHTML = `
@@ -2143,7 +2733,7 @@
                             <th class="sortable" data-sort="GA">GA</th>
                             <th class="sortable" data-sort="GD">GD</th>
                             <th class="sortable" data-sort="Pts">Pts</th>
-                            <th class="sortable" data-sort="FairPlay">FP</th>
+                            <th class="sortable" data-sort="FairPlay" data-tooltip="Fair Play: Sum of yellow cards (1 point) and red cards (3 points). Lower is better.">FP</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -2155,7 +2745,7 @@
                     const row = tbody.insertRow();
                     row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td class="team-name"><span class="team-logo-placeholder"></span>${team ? team.name : 'Unknown'}</td>
+                        <td class="team-name"><span class="team-logo-placeholder" style="background: ${team?.primaryColor || '#ccc'};"></span>${team ? team.name : 'Unknown'}</td>
                         <td>${teamStats.P}</td>
                         <td>${teamStats.W}</td>
                         <td>${teamStats.D}</td>
@@ -2168,9 +2758,9 @@
                     `;
                     if (advanceRelegateCount > 0) {
                         if (index < advanceRelegateCount) {
-                            row.style.backgroundColor = 'rgba(76, 175, 80, 0.1)'; // Green for advancing
+                            row.style.backgroundColor = 'var(--advancing-bg)'; // Green for advancing
                         } else if (index >= standings.length - advanceRelegateCount && standings.length > advanceRelegateCount) {
-                            row.style.backgroundColor = 'rgba(244, 67, 54, 0.1)'; // Red for relegating
+                            row.style.backgroundColor = 'var(--relegating-bg)'; // Red for relegating
                         }
                     }
                 });
@@ -2212,7 +2802,7 @@
                             const row = tbody.insertRow();
                             row.innerHTML = `
                                 <td>${index + 1}</td>
-                                <td class="team-name"><span class="team-logo-placeholder"></span>${team ? team.name : 'Unknown'}</td>
+                                <td class="team-name"><span class="team-logo-placeholder" style="background: ${team?.primaryColor || '#ccc'};"></span>${team ? team.name : 'Unknown'}</td>
                                 <td>${teamStats.P}</td>
                                 <td>${teamStats.W}</td>
                                 <td>${teamStats.D}</td>
@@ -2225,16 +2815,16 @@
                             `;
                             if (advanceRelegateCount > 0) {
                                 if (index < advanceRelegateCount) {
-                                    row.style.backgroundColor = 'rgba(76, 175, 80, 0.1)'; // Green for advancing
+                                    row.style.backgroundColor = 'var(--advancing-bg)'; // Green for advancing
                                 } else if (index >= standings.length - advanceRelegateCount && standings.length > advanceRelegateCount) {
-                                    row.style.backgroundColor = 'rgba(244, 67, 54, 0.1)'; // Red for relegating
+                                    row.style.backgroundColor = 'var(--relegating-bg)'; // Red for relegating
                                 }
                             }
                         });
                     });
                 });
-
-                return table;
+                tableResponsive.appendChild(table);
+                return tableResponsive;
             },
 
             renderPlayerStats() {
@@ -2343,11 +2933,11 @@
 
                         matchElement.innerHTML = `
                             <div class="team-line">
-                                <span class="team-name">${homeTeam ? homeTeam.name : 'TBD'}</span>
+                                <span class="team-name"><span class="team-logo-placeholder" style="background: ${homeTeam?.primaryColor || '#ccc'};"></span>${homeTeam ? homeTeam.name : 'TBD'}</span>
                                 <span class="score">${fixture.status === 'played' ? homeScore : ''}</span>
                             </div>
                             <div class="team-line">
-                                <span class="team-name">${awayTeam ? awayTeam.name : 'TBD'}</span>
+                                <span class="team-name"><span class="team-logo-placeholder" style="background: ${awayTeam?.primaryColor || '#ccc'};"></span>${awayTeam ? awayTeam.name : 'TBD'}</span>
                                 <span class="score">${fixture.status === 'played' ? awayScore : ''}</span>
                             </div>
                             ${aggregateScoreHtml}
@@ -2355,12 +2945,10 @@
                         matchContainer.appendChild(matchElement);
 
                         // Add bracket lines and arrows for Champions League
-                        if (tournament.mode === 'champions') {
-                            if (roundIndex < knockoutData.rounds.length - 1) { // Not the final round
-                                const arrow = document.createElement('div');
-                                arrow.classList.add('bracket-arrow');
-                                matchContainer.appendChild(arrow);
-                            }
+                        if (tournament.mode === 'champions' && roundIndex < knockoutData.rounds.length - 1) { // Not the final round
+                            const arrow = document.createElement('div');
+                            arrow.classList.add('bracket-arrow');
+                            matchContainer.appendChild(arrow);
                         }
                         matchesDiv.appendChild(matchContainer);
                     });
@@ -2368,45 +2956,6 @@
                     bracketWrapper.appendChild(roundDiv);
                 });
                 this.elements.knockoutBracketContainer.appendChild(bracketWrapper);
-
-                // World Cup specific bracket rendering (more complex lines)
-                if (tournament.mode === 'worldcup') {
-                    this.renderWorldCupBracketLines(bracketWrapper, knockoutData);
-                }
-            },
-
-            renderWorldCupBracketLines(bracketWrapper, knockoutData) {
-                const rounds = bracketWrapper.querySelectorAll('.knockout-round');
-                rounds.forEach((roundDiv, roundIndex) => {
-                    const matches = roundDiv.querySelectorAll('.knockout-match-container');
-                    matches.forEach((matchContainer, matchIndex) => {
-                        // Horizontal line to the match
-                        const connector = document.createElement('div');
-                        connector.classList.add('bracket-connector');
-                        matchContainer.appendChild(connector);
-
-                        if (roundIndex < rounds.length - 1) { // Not the final round
-                            matchContainer.classList.add('has-next-match');
-
-                            // Vertical line connecting two matches
-                            if (matchIndex % 2 === 0 && matches[matchIndex + 1]) {
-                                const verticalConnector = document.createElement('div');
-                                verticalConnector.classList.add('bracket-connector-vertical');
-                                matchContainer.appendChild(verticalConnector);
-                            }
-
-                            // Horizontal line to the next round
-                            const horizontalNextConnector = document.createElement('div');
-                            horizontalNextConnector.classList.add('bracket-connector-horizontal-next');
-                            matchContainer.appendChild(horizontalNextConnector);
-
-                            // Arrow for advancing team
-                            const arrow = document.createElement('div');
-                            arrow.classList.add('bracket-arrow');
-                            matchContainer.appendChild(arrow);
-                        }
-                    });
-                });
             },
 
             renderManageSection() {
@@ -2422,10 +2971,10 @@
 
                 if (tournament.mode === 'league') {
                     this.elements.drawGroupsBtn.style.display = 'none';
-                    this.elements.generateFixturesBtn.style.display = (teams.length >= 2 && fixtures.length === 0) ? 'inline-block' : 'none';
+                    this.elements.generateFixturesBtn.style.display = (teams.length >= 2 && fixtures.length === 0) ? 'inline-flex' : 'none';
                 } else { // Champions League & World Cup
-                    this.elements.drawGroupsBtn.style.display = (teams.length >= tournament.config.numGroups * tournament.config.groupSize && !tournament.groups) ? 'inline-block' : 'none';
-                    this.elements.generateFixturesBtn.style.display = (tournament.groups && fixtures.length === 0) ? 'inline-block' : 'none';
+                    this.elements.drawGroupsBtn.style.display = (teams.length >= tournament.config.numGroups * tournament.config.groupSize && !tournament.groups) ? 'inline-flex' : 'none';
+                    this.elements.generateFixturesBtn.style.display = (tournament.groups && fixtures.length === 0) ? 'inline-flex' : 'none';
                 }
             },
 
@@ -2433,7 +2982,7 @@
                 const form = this.elements.tournamentSettingsForm;
                 form.innerHTML = '';
 
-                const createInput = (id, label, type, value, min = null, max = null, step = null) => {
+                const createInput = (id, label, type, value, min = null, max = null, step = null, tooltip = '') => {
                     const div = document.createElement('div');
                     div.classList.add('form-group');
                     div.innerHTML = `<label for="${id}">${label}:</label>`;
@@ -2444,16 +2993,18 @@
                     if (min !== null) input.min = min;
                     if (max !== null) input.max = max;
                     if (step !== null) input.step = step;
+                    if (tooltip) input.setAttribute('data-tooltip', tooltip);
                     div.appendChild(input);
                     return div;
                 };
 
-                const createSelect = (id, label, options, selectedValue) => {
+                const createSelect = (id, label, options, selectedValue, tooltip = '') => {
                     const div = document.createElement('div');
                     div.classList.add('form-group');
                     div.innerHTML = `<label for="${id}">${label}:</label>`;
                     const select = document.createElement('select');
                     select.id = id;
+                    if (tooltip) select.setAttribute('data-tooltip', tooltip);
                     options.forEach(opt => {
                         const option = document.createElement('option');
                         option.value = opt.value;
@@ -2465,13 +3016,14 @@
                     return div;
                 };
 
-                const createCheckbox = (id, label, checked) => {
+                const createCheckbox = (id, label, checked, tooltip = '') => {
                     const div = document.createElement('div');
                     div.classList.add('form-group');
                     const input = document.createElement('input');
                     input.type = 'checkbox';
                     input.id = id;
                     input.checked = checked;
+                    if (tooltip) input.setAttribute('data-tooltip', tooltip);
                     const labelElem = document.createElement('label');
                     labelElem.htmlFor = id;
                     labelElem.textContent = label;
@@ -2486,16 +3038,16 @@
                     form.appendChild(createSelect('league-round-robin-type', 'Round-Robin Type', [
                         { value: 'single', text: 'Single Round-Robin' },
                         { value: 'double', text: 'Double Round-Robin' }
-                    ], tournament.config.roundRobinType));
+                    ], tournament.config.roundRobinType, 'Single: Each team plays once. Double: Each team plays home and away.'));
                     form.appendChild(createInput('league-points-win', 'Points for Win', 'number', tournament.config.pointsWin, 0));
                     form.appendChild(createInput('league-points-draw', 'Points for Draw', 'number', tournament.config.pointsDraw, 0));
                     form.appendChild(createInput('league-points-loss', 'Points for Loss', 'number', tournament.config.pointsLoss, 0));
-                    form.appendChild(createInput('league-relegation-spots', 'Relegation Spots (visual)', 'number', tournament.config.relegationSpots, 0));
+                    form.appendChild(createInput('league-relegation-spots', 'Relegation Spots (visual)', 'number', tournament.config.relegationSpots, 0, null, null, 'Number of teams to highlight as relegated in standings.'));
 
                     const tieBreakerOrderDiv = document.createElement('div');
                     tieBreakerOrderDiv.classList.add('form-group');
                     tieBreakerOrderDiv.innerHTML = `<label for="league-tie-breaker-order">Tie-breaker Order (comma-separated):</label>
-                                                    <input type="text" id="league-tie-breaker-order" value="${tournament.config.tieBreakerOrder.join(', ')}">
+                                                    <input type="text" id="league-tie-breaker-order" value="${tournament.config.tieBreakerOrder.join(', ')}" data-tooltip="Order of rules to break ties in standings.">
                                                     <small>Options: points, goalDifference, goalsFor, headToHeadPoints, headToHeadGoalDifference, fairPlay, alphabetical</small>`;
                     form.appendChild(tieBreakerOrderDiv);
 
@@ -2505,10 +3057,10 @@
                     form.appendChild(createSelect('group-stage-round-robin-type', 'Group Stage Round-Robin Type', [
                         { value: 'single', text: 'Single Round-Robin' },
                         { value: 'double', text: 'Double Round-Robin' }
-                    ], tournament.config.groupStageRoundRobinType));
+                    ], tournament.config.groupStageRoundRobinType, 'Single: Each team plays once. Double: Each team plays home and away within the group.'));
 
                     if (tournament.mode === 'champions') {
-                        form.appendChild(createCheckbox('away-goals-rule-enabled', 'Enable Away Goals Rule (Knockout)', tournament.config.awayGoalsRuleEnabled));
+                        form.appendChild(createCheckbox('away-goals-rule-enabled', 'Enable Away Goals Rule (Knockout)', tournament.config.awayGoalsRuleEnabled, 'If enabled, away goals count double in case of an aggregate tie.'));
                     }
                 }
             },
@@ -2549,13 +3101,13 @@
                 teams.forEach(team => {
                     const row = tbody.insertRow();
                     row.innerHTML = `
-                        <td>${team.name}</td>
+                        <td><span class="team-logo-placeholder" style="background: ${team?.primaryColor || '#ccc'};"></span>${team.name}</td>
                         <td>${team.shortName || ''}</td>
                         <td>${team.country || ''}</td>
                         <td>
-                            <button class="btn" style="background-color: var(--info-color); padding: 5px 10px;" onclick="app.ui.showTeamModal('${team.id}')">Edit</button>
-                            <button class="btn" style="background-color: var(--success-color); padding: 5px 10px;" onclick="app.ui.showPlayerModal('${team.id}')">Players</button>
-                            <button class="btn" style="background-color: var(--error-color); padding: 5px 10px;" onclick="app.ui.deleteTeam('${team.id}')">Delete</button>
+                            <button class="btn" style="background-color: var(--info-color); padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="app.ui.showTeamModal('${team.id}')"><span role="img" aria-label="Edit">✏️</span> Edit</button>
+                            <button class="btn" style="background-color: var(--success-color); padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="app.ui.showPlayerModal('${team.id}')"><span role="img" aria-label="Players">👥</span> Players</button>
+                            <button class="btn" style="background-color: var(--error-color); padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="app.ui.deleteTeam('${team.id}')"><span role="img" aria-label="Delete">🗑️</span> Delete</button>
                         </td>
                     `;
                 });
@@ -2691,8 +3243,8 @@
                         <td>${player.name}</td>
                         <td>${player.position || ''}</td>
                         <td>
-                            <button class="btn" style="background-color: var(--info-color); padding: 5px 10px;" onclick="app.ui.editPlayer('${teamId}', '${player.id}')">Edit</button>
-                            <button class="btn" style="background-color: var(--error-color); padding: 5px 10px;" onclick="app.ui.deletePlayer('${teamId}', '${player.id}')">Delete</button>
+                            <button class="btn" style="background-color: var(--info-color); padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="app.ui.editPlayer('${teamId}', '${player.id}')"><span role="img" aria-label="Edit">✏️</span> Edit</button>
+                            <button class="btn" style="background-color: var(--error-color); padding: 0.4rem 0.7rem; font-size: 0.8rem;" onclick="app.ui.deletePlayer('${teamId}', '${player.id}')"><span role="img" aria-label="Delete">🗑️</span> Delete</button>
                         </td>
                     `;
                 });
@@ -2831,7 +3383,7 @@
 
                 // Show ET/Penalties buttons for knockout matches
                 const isKnockout = fixture.stage === 'knockout';
-                this.elements.matchModalExtraTimeBtn.style.display = isKnockout ? 'inline-block' : 'none';
+                this.elements.matchModalExtraTimeBtn.style.display = isKnockout ? 'inline-flex' : 'none';
                 this.elements.matchModalPenaltiesBtn.style.display = 'none'; // Only show after ET
 
                 if (fixture.extraTime) {
@@ -2843,7 +3395,12 @@
                         this.elements.matchModalHomeScorePen.value = fixture.penalties.home || 0;
                         this.elements.matchModalAwayScorePen.value = fixture.penalties.away || 0;
                     } else {
-                        this.elements.matchModalPenaltiesBtn.style.display = 'inline-block';
+                        // If ET is shown, and scores are still tied, show penalties button
+                        const currentHomeScore = parseInt(this.elements.matchModalHomeScore.value) + parseInt(this.elements.matchModalHomeScoreET.value);
+                        const currentAwayScore = parseInt(this.elements.matchModalAwayScore.value) + parseInt(this.elements.matchModalAwayScoreET.value);
+                        if (currentHomeScore === currentAwayScore) {
+                            this.elements.matchModalPenaltiesBtn.style.display = 'inline-flex';
+                        }
                     }
                 }
 
@@ -2851,7 +3408,7 @@
                 this.populatePlayerSelect(fixture.homeTeamId, this.elements.eventPlayer, fixture.awayTeamId);
                 this.populatePlayerSelect(fixture.homeTeamId, this.elements.eventAssistPlayer, fixture.awayTeamId, true); // For assists, include both teams
                 this.populateEventTeamSelect(fixture.homeTeamId, fixture.awayTeamId);
-                this.elements.eventAssistPlayerGroup.style.display = (this.elements.eventType.value === 'goal') ? 'block' : 'none';
+                this.elements.eventAssistPlayerGroup.style.display = (this.elements.eventType.value === 'goal') ? 'flex' : 'none';
 
                 this.renderMatchEvents(fixture.events || []);
                 this.showModal('match-modal');
@@ -2937,7 +3494,7 @@
                     li.innerHTML = `
                         <span class="event-details ${eventClass}">${eventText}</span>
                         <div class="event-actions">
-                            <button onclick="app.ui.removeEventFromMatchModal('${event.id}')">Remove</button>
+                            <button onclick="app.ui.removeEventFromMatchModal('${event.id}')" aria-label="Remove event">&times;</button>
                         </div>
                     `;
                     li.dataset.eventId = event.id;
@@ -3001,7 +3558,7 @@
 
                 // If knockout and score is tied, suggest ET
                 if (fixture.stage === 'knockout' && simulatedScore.home === simulatedScore.away) {
-                    this.elements.matchModalExtraTimeBtn.style.display = 'inline-block';
+                    this.elements.matchModalExtraTimeBtn.style.display = 'inline-flex';
                 } else {
                     this.elements.matchModalExtraTimeBtn.style.display = 'none';
                 }
@@ -3009,7 +3566,7 @@
 
             toggleExtraTimeInput(show) {
                 this.elements.matchModalExtraTimeSection.style.display = show ? 'block' : 'none';
-                this.elements.matchModalExtraTimeBtn.style.display = show ? 'none' : 'inline-block';
+                this.elements.matchModalExtraTimeBtn.style.display = show ? 'none' : 'inline-flex';
                 if (!show) {
                     this.elements.matchModalHomeScoreET.value = 0;
                     this.elements.matchModalAwayScoreET.value = 0;
@@ -3019,14 +3576,14 @@
                     const homeScore = parseInt(this.elements.matchModalHomeScore.value);
                     const awayScore = parseInt(this.elements.matchModalAwayScore.value);
                     if (homeScore === awayScore) {
-                        this.elements.matchModalPenaltiesBtn.style.display = 'inline-block';
+                        this.elements.matchModalPenaltiesBtn.style.display = 'inline-flex';
                     }
                 }
             },
 
             togglePenaltiesInput(show) {
                 this.elements.matchModalPenaltiesSection.style.display = show ? 'block' : 'none';
-                this.elements.matchModalPenaltiesBtn.style.display = show ? 'none' : 'inline-block';
+                this.elements.matchModalPenaltiesBtn.style.display = show ? 'none' : 'inline-flex';
                 if (!show) {
                     this.elements.matchModalHomeScorePen.value = 0;
                     this.elements.matchModalAwayScorePen.value = 0;
@@ -3076,6 +3633,25 @@
                 app.logic.updateMatchResult(tournament.id, fixture.id, result, fixture.events, extraTimeResult, penaltiesResult);
                 this.hideModal('match-modal');
                 this.renderCurrentTournamentView(); // Re-render all relevant sections
+            },
+
+            updateFabVisibility() {
+                const currentTournament = app.data.getTournament(app.data.currentTournamentId);
+                const currentTab = this.currentActiveTab;
+
+                this.elements.fabAddTeam.style.display = 'none';
+                this.elements.fabSimulateMatchday.style.display = 'none';
+
+                if (currentTournament) {
+                    if (currentTab === 'manage') {
+                        this.elements.fabAddTeam.style.display = 'flex';
+                    }
+                    const fixtures = app.data.getFixtures(currentTournament.id);
+                    const scheduledFixtures = fixtures.filter(f => f.status === 'scheduled');
+                    if (scheduledFixtures.length > 0) {
+                        this.elements.fabSimulateMatchday.style.display = 'flex';
+                    }
+                }
             }
         };
 
@@ -3171,7 +3747,7 @@
                     teamIds.push('BYE'); // Add a dummy team for odd number of teams
                 }
 
-                const numRounds = (numTeams % 2 === 0) ? numTeams - 1 : numTeams;
+                const numRounds = (teamIds.length - 1); // Number of rounds for single round-robin
                 const half = teamIds.length / 2;
 
                 for (let round = 0; round < numRounds; round++) {
@@ -3240,39 +3816,48 @@
 
                 let currentGroupIndex = 0;
                 for (const team of shuffledTeams) {
-                    const groupName = String.fromCharCode(65 + currentGroupIndex);
-                    groups[groupName].push(team.id);
+                    let assigned = false;
+                    // Try to assign to current group
+                    if (groups[String.fromCharCode(65 + currentGroupIndex)].length < groupSize) {
+                        const teamsInCurrentGroup = groups[String.fromCharCode(65 + currentGroupIndex)].map(id => app.data.getTeam(id));
+                        const currentGroupCountries = new Set(teamsInCurrentGroup.map(t => t.country));
+                        if (!currentGroupCountries.has(team.country) || teamsInCurrentGroup.filter(t => t.country === team.country).length === 0) {
+                            groups[String.fromCharCode(65 + currentGroupIndex)].push(team.id);
+                            assigned = true;
+                        }
+                    }
 
-                    // Simple country protection: try to avoid same country in same group
-                    // This is a best-effort attempt and might not always succeed if many teams from same country
-                    const teamsInCurrentGroup = groups[groupName].map(id => app.data.getTeam(id));
-                    const currentGroupCountries = new Set(teamsInCurrentGroup.map(t => t.country));
-                    if (currentGroupCountries.has(team.country) && teamsInCurrentGroup.filter(t => t.country === team.country).length > 1) {
-                        // If same country, try next group
-                        groups[groupName].pop(); // Remove team
-                        let nextAvailableGroup = -1;
-                        for (let j = 1; j <= numGroups; j++) {
-                            const nextGroupIdx = (currentGroupIndex + j) % numGroups;
-                            const nextGroupName = String.fromCharCode(65 + nextGroupIdx);
-                            const teamsInNextGroup = groups[nextGroupName].map(id => app.data.getTeam(id));
-                            const nextGroupCountries = new Set(teamsInNextGroup.map(t => t.country));
-                            if (!nextGroupCountries.has(team.country) && teamsInNextGroup.length < groupSize) {
-                                nextAvailableGroup = nextGroupIdx;
-                                break;
+                    // If not assigned or country conflict, try other groups
+                    if (!assigned) {
+                        let foundSpot = false;
+                        for (let j = 0; j < numGroups; j++) {
+                            const targetGroupIndex = (currentGroupIndex + j) % numGroups;
+                            const targetGroupName = String.fromCharCode(65 + targetGroupIndex);
+                            if (groups[targetGroupName].length < groupSize) {
+                                const teamsInTargetGroup = groups[targetGroupName].map(id => app.data.getTeam(id));
+                                const targetGroupCountries = new Set(teamsInTargetGroup.map(t => t.country));
+                                if (!targetGroupCountries.has(team.country) || teamsInTargetGroup.filter(t => t.country === team.country).length === 0) {
+                                    groups[targetGroupName].push(team.id);
+                                    foundSpot = true;
+                                    break;
+                                }
                             }
                         }
-                        if (nextAvailableGroup !== -1) {
-                            groups[String.fromCharCode(65 + nextAvailableGroup)].push(team.id);
-                        } else {
-                            // Fallback: if no other group available, put it back in original group
-                            groups[groupName].push(team.id);
-                            console.warn(`Could not avoid same country for ${team.name} in group ${groupName}.`);
+                        if (!foundSpot) {
+                            // Fallback: if no country-safe spot, just put it in the first available group
+                            for (let j = 0; j < numGroups; j++) {
+                                const targetGroupIndex = (currentGroupIndex + j) % numGroups;
+                                const targetGroupName = String.fromCharCode(65 + targetGroupIndex);
+                                if (groups[targetGroupName].length < groupSize) {
+                                    groups[targetGroupName].push(team.id);
+                                    foundSpot = true;
+                                    console.warn(`Could not avoid same country for ${team.name} in group ${targetGroupName}.`);
+                                    break;
+                                }
+                            }
                         }
                     }
-
-                    if (groups[groupName].length >= groupSize) {
-                        currentGroupIndex = (currentGroupIndex + 1) % numGroups;
-                    }
+                    currentGroupIndex = (currentGroupIndex + 1) % numGroups;
                 }
 
                 tournament.groups = groups;
@@ -3291,43 +3876,51 @@
 
                     // Generate round-robin for each group
                     const groupFixtures = [];
-                    for (let i = 0; i < numTeams; i++) {
-                        for (let j = i + 1; j < numTeams; j++) {
-                            const homeTeamId = teamIds[i];
-                            const awayTeamId = teamIds[j];
+                    // Using Berger table method for round-robin within groups for better home/away balance
+                    let currentGroupTeamIds = [...teamIds];
+                    if (numTeams % 2 !== 0) {
+                        currentGroupTeamIds.push('BYE');
+                    }
+                    const numGroupRounds = currentGroupTeamIds.length - 1;
+                    const half = currentGroupTeamIds.length / 2;
 
-                            // First leg
-                            groupFixtures.push({
-                                id: app.data.generateUniqueId(),
-                                tournamentId,
-                                date: new Date(fixtureDate.getTime()).toISOString(),
-                                homeTeamId: homeTeamId,
-                                awayTeamId: awayTeamId,
-                                stage: 'group',
-                                groupId: groupId,
-                                leg: 1,
-                                status: 'scheduled',
-                                score: { home: null, away: null },
-                                events: []
-                            });
+                    for (let round = 0; round < numGroupRounds; round++) {
+                        for (let i = 0; i < half; i++) {
+                            const homeTeamId = currentGroupTeamIds[i];
+                            const awayTeamId = currentGroupTeamIds[currentGroupTeamIds.length - 1 - i];
 
-                            if (roundRobinType === 'double') {
-                                // Second leg
+                            if (homeTeamId !== 'BYE' && awayTeamId !== 'BYE') {
+                                // First leg
                                 groupFixtures.push({
                                     id: app.data.generateUniqueId(),
                                     tournamentId,
-                                    date: new Date(fixtureDate.getTime() + (7 * 24 * 60 * 60 * 1000)).toISOString(), // A week later
-                                    homeTeamId: awayTeamId,
-                                    awayTeamId: homeTeamId,
+                                    date: new Date(fixtureDate.getTime()).toISOString(),
+                                    homeTeamId: homeTeamId,
+                                    awayTeamId: awayTeamId,
                                     stage: 'group',
                                     groupId: groupId,
-                                    leg: 2,
+                                    leg: 1,
                                     status: 'scheduled',
                                     score: { home: null, away: null },
                                     events: []
                                 });
                             }
                         }
+                        // Rotate teams
+                        const lastTeam = currentGroupTeamIds.pop();
+                        currentGroupTeamIds.splice(1, 0, lastTeam);
+                    }
+
+                    if (roundRobinType === 'double') {
+                        const secondLegFixtures = groupFixtures.map(f => ({
+                            ...f,
+                            id: app.data.generateUniqueId(),
+                            homeTeamId: f.awayTeamId, // Swap home and away
+                            awayTeamId: f.homeTeamId,
+                            leg: 2,
+                            date: new Date(new Date(f.date).getTime() + (numGroupRounds * 7 * 24 * 60 * 60 * 1000)).toISOString(), // Offset dates for second leg
+                        }));
+                        fixtures.push(...secondLegFixtures);
                     }
                     fixtures.push(...groupFixtures);
                     fixtureDate.setDate(fixtureDate.getDate() + 7); // Advance date for next group's first match
@@ -3452,9 +4045,11 @@
                 const winners = qualified.filter(t => t.seed === 1);
                 const runnersUp = qualified.filter(t => t.seed === 2);
 
+                // Pair A1 vs B2, B1 vs A2, C1 vs D2, D1 vs C2 etc.
+                // This ensures group winners play runners-up and avoids same group teams in R16
                 for (let i = 0; i < winners.length; i++) {
                     finalQualified.push(winners[i]);
-                    finalQualified.push(runnersUp[(i + 1) % runnersUp.length]); // Simple pairing
+                    finalQualified.push(runnersUp[(i + Math.floor(winners.length / 2)) % runnersUp.length]); // Simple pairing logic
                 }
 
                 return finalQualified;
@@ -3542,7 +4137,10 @@
                         const player = app.data.getPlayer(event.teamId, event.playerId);
                         if (player) {
                             if (event.type === 'goal') player.stats.goals--;
-                            if (event.type === 'assist') player.stats.assists--;
+                            if (event.type === 'assist') {
+                                const assistPlayer = app.data.getPlayer(event.teamId, event.assistId);
+                                if (assistPlayer) assistPlayer.stats.assists--;
+                            }
                             if (event.type === 'yellow') {
                                 player.stats.yellowCards--;
                                 app.data.getTeam(event.teamId).stats.FairPlay--;
@@ -3552,13 +4150,14 @@
                                 app.data.getTeam(event.teamId).stats.FairPlay -= 3; // Red card penalty
                             }
                         }
-                        // Revert minutes played (simplified)
-                        const teamPlayers = app.data.getPlayersInTeam(event.teamId);
-                        teamPlayers.forEach(p => {
-                            p.stats.minutes -= (fixture.extraTime ? 120 : 90);
-                        });
                     });
                 }
+                // Revert minutes played (simplified)
+                const minutesPlayed = fixture.extraTime ? 120 : 90;
+                const homePlayers = app.data.getPlayersInTeam(fixture.homeTeamId);
+                homePlayers.forEach(p => p.stats.minutes -= minutesPlayed);
+                const awayPlayers = app.data.getPlayersInTeam(fixture.awayTeamId);
+                awayPlayers.forEach(p => p.stats.minutes -= minutesPlayed);
             },
 
             applyMatchStats(tournamentId, fixture) {
@@ -3576,11 +4175,8 @@
 
                 homeTeam.stats.GF += fixture.score.home;
                 homeTeam.stats.GA += fixture.score.away;
-                homeTeam.stats.GD = homeTeam.stats.GF - homeTeam.stats.GA;
-
                 awayTeam.stats.GF += fixture.score.away;
                 awayTeam.stats.GA += fixture.score.home;
-                awayTeam.stats.GD = awayTeam.stats.GF - awayTeam.stats.GA;
 
                 if (fixture.score.home > fixture.score.away) {
                     homeTeam.stats.W++;
@@ -3634,8 +4230,6 @@
 
                 let homeTotalGoals = fixture.score.home;
                 let awayTotalGoals = fixture.score.away;
-                let homeAwayGoals = 0;
-                let awayAwayGoals = 0;
 
                 if (fixture.extraTime) {
                     homeTotalGoals += fixture.extraTime.home;
@@ -3658,9 +4252,6 @@
                                              (secondLeg.homeTeamId === fixture.homeTeamId ? secondLeg.score.home : secondLeg.score.away);
                         const aggAwayGoals = (firstLeg.homeTeamId === fixture.awayTeamId ? firstLeg.score.home : firstLeg.score.away) +
                                              (secondLeg.homeTeamId === fixture.awayTeamId ? secondLeg.score.home : secondLeg.score.away);
-
-                        const firstLegHomeAwayGoals = firstLeg.homeTeamId === fixture.homeTeamId ? firstLeg.score.away : firstLeg.score.home;
-                        const secondLegHomeAwayGoals = secondLeg.homeTeamId === fixture.homeTeamId ? secondLeg.score.away : secondLeg.score.home;
 
                         const aggHomeAwayGoals = (firstLeg.homeTeamId === fixture.homeTeamId ? firstLeg.score.away : firstLeg.score.home) +
                                                  (secondLeg.homeTeamId === fixture.homeTeamId ? secondLeg.score.away : secondLeg.score.home);
@@ -3825,14 +4416,27 @@
                     let allMatchesPlayedInRound = true;
                     const roundWinners = [];
 
+                    // Collect winners from current round
                     for (let j = 0; j < round.matches.length; j++) {
                         const fixture = app.data.getFixture(tournamentId, round.matches[j]);
                         if (!fixture || fixture.status !== 'played') {
                             allMatchesPlayedInRound = false;
                             break;
                         }
-                        if (fixture.winnerId) {
+                        // For two-legged ties, winner is determined by aggregate score
+                        if (tournament.mode === 'champions' && fixture.leg) {
+                            const aggregate = this.getAggregateScore(tournamentId, fixture.homeTeamId, fixture.awayTeamId, fixture.roundId);
+                            if (aggregate && aggregate.winnerId) {
+                                roundWinners.push(aggregate.winnerId);
+                            } else {
+                                allMatchesPlayedInRound = false; // Aggregate not determined yet
+                                break;
+                            }
+                        } else if (fixture.winnerId) {
                             roundWinners.push(fixture.winnerId);
+                        } else {
+                            allMatchesPlayedInRound = false; // Single match not decided
+                            break;
                         }
                     }
 
@@ -4315,6 +4919,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             app.ui.init();
             app.logic.init();
+
+            app.data.loadThemePreference(); // Load theme preference first
+            app.ui.applyDarkModePreference(); // Apply it to the body
 
             if (!app.data.loadState()) {
                 app.logic.seedDemoData();
