@@ -649,6 +649,24 @@
         }
 
         /* --- Match Fixtures --- */
+        .fixture-list-group {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            background-color: var(--card-bg);
+            box-shadow: var(--card-shadow);
+        }
+
+        .fixture-list-group h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
         .fixture-list {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
@@ -659,7 +677,7 @@
         }
 
         .fixture-list .fixture-item {
-            background-color: var(--card-bg);
+            background-color: var(--secondary-bg); /* Use secondary-bg for items within group card */
             border-radius: 0.5rem;
             padding: 1rem 1.2rem;
             display: flex;
@@ -1706,8 +1724,8 @@
                     </div>
                     <button id="simulate-all-fixtures-btn" class="btn" data-tooltip="Simulate all remaining matches with random scores."><span role="img" aria-label="Simulate">🎲</span> Simulate All Remaining</button>
                 </div>
-                <div id="fixtures-list" class="fixture-list">
-                    <!-- Fixtures will be loaded here -->
+                <div id="fixtures-list">
+                    <!-- Fixtures will be loaded here, grouped by matchday -->
                 </div>
             </div>
 
@@ -1729,6 +1747,45 @@
                         </select>
                     </div>
                 </div>
+
+                <!-- New section for manual player stats adjustment -->
+                <div class="card mb-2">
+                    <h3>Adjust Player Stats</h3>
+                    <div class="grid-2-col">
+                        <div class="form-group">
+                            <label for="adjust-stats-team-select">Team:</label>
+                            <select id="adjust-stats-team-select">
+                                <option value="">Select Team</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="adjust-stats-player-select">Player:</label>
+                            <select id="adjust-stats-player-select" disabled>
+                                <option value="">Select Player</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-3-col">
+                        <div class="form-group">
+                            <label for="adjust-stats-type-select">Stat Type:</label>
+                            <select id="adjust-stats-type-select">
+                                <option value="goals">Goals</option>
+                                <option value="assists">Assists</option>
+                                <option value="yellowCards">Yellow Cards</option>
+                                <option value="redCards">Red Cards</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="adjust-stats-amount">Amount (e.g., +1, -1):</label>
+                            <input type="number" id="adjust-stats-amount" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <button id="update-player-stat-btn" class="btn" disabled><span role="img" aria-label="Update">🔄</span> Update Stat</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid-2-col">
                     <div class="player-stats-leaderboard card">
                         <h3><span role="img" aria-label="Goals">⚽</span> Top Scorers</h3>
@@ -1834,6 +1891,8 @@
                     <div class="flex-row mt-1">
                         <button id="add-team-btn" class="btn"><span role="img" aria-label="Add Team">➕</span> Add Team</button>
                         <button id="quick-add-team-btn" class="btn"><span role="img" aria-label="Quick Add Team">⚡</span> Quick Add Team</button>
+                        <button id="bulk-add-teams-btn" class="btn"><span role="img" aria-label="Bulk Add Teams">📝</span> Bulk Add Teams</button>
+                        <button id="import-tournament-teams-btn" class="btn"><span role="img" aria-label="Import Teams">📥</span> Import Teams from Tournament</button>
                     </div>
                     <button id="draw-groups-btn" class="btn mt-1" style="display: none;" data-tooltip="Randomly assign teams to groups."><span role="img" aria-label="Draw Groups">🎲</span> Draw Groups</button>
                     <button id="generate-fixtures-btn" class="btn mt-1" style="display: none;" data-tooltip="Generate all matches for the tournament."><span role="img" aria-label="Generate Fixtures">🗓️</span> Generate Fixtures</button>
@@ -1976,6 +2035,10 @@
                         <!-- Common countries will be added here by JS -->
                     </datalist>
                 </div>
+                 <div class="form-group">
+                    <label for="team-city">City (for league home/away clashes):</label>
+                    <input type="text" id="team-city" placeholder="e.g., Manchester">
+                </div>
                 <div class="grid-2-col">
                     <div class="form-group">
                         <label for="team-primary-color">Primary Color:</label>
@@ -2019,6 +2082,51 @@
             <div class="modal-footer">
                 <button class="btn" data-close-modal="team-modal">Cancel</button>
                 <button id="team-modal-save-btn" class="btn"><span role="img" aria-label="Save">💾</span> Save Team & Players</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Modal for Bulk Add Teams -->
+    <div id="bulk-add-teams-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Bulk Add Teams</h2>
+                <button class="modal-close-btn" data-close-modal="bulk-add-teams-modal" aria-label="Close bulk add teams modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Paste team data in CSV or JSON format.</p>
+                <p><small>CSV example: <code>TeamName,ShortName,Country,City,PrimaryColor(#HEX),SecondaryColor(#HEX)</code></small></p>
+                <p><small>JSON example: <code>[{"name":"Team A", "shortName":"TA", "country":"USA", "city":"LA", "primaryColor":"#ff0000"}, {"name":"Team B", ...}]</code></small></p>
+                <div class="form-group mt-1">
+                    <textarea id="bulk-teams-data" rows="10" placeholder="Paste your team data here..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-close-modal="bulk-add-teams-modal">Cancel</button>
+                <button id="bulk-teams-import-btn" class="btn"><span role="img" aria-label="Import">📥</span> Add Teams</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Modal for Import Teams from Other Tournaments -->
+    <div id="import-tournament-teams-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Import Teams from Another Tournament</h2>
+                <button class="modal-close-btn" data-close-modal="import-tournament-teams-modal" aria-label="Close import teams modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="import-source-tournament-select">Select Source Tournament:</label>
+                    <select id="import-source-tournament-select">
+                        <option value="">Choose a tournament</option>
+                        <!-- Other tournaments will be loaded here -->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-close-modal="import-tournament-teams-modal">Cancel</button>
+                <button id="perform-import-teams-btn" class="btn" disabled><span role="img" aria-label="Import">📥</span> Import Selected Teams</button>
             </div>
         </div>
     </div>
@@ -2162,6 +2270,9 @@
             getTournament(id) {
                 return app.data.state.tournaments.find(t => t.id === id);
             },
+            getTournamentsExcept(excludedId) {
+                return app.data.state.tournaments.filter(t => t.id !== excludedId);
+            },
             getTeamsInTournament(tournamentId) {
                 const tournament = app.data.getTournament(tournamentId);
                 if (!tournament) return [];
@@ -2246,6 +2357,11 @@
                 topAssistsTable: document.getElementById('top-assists-table').querySelector('tbody'),
                 topYellowCardsTable: document.getElementById('top-yellow-cards-table').querySelector('tbody'),
                 topRedCardsTable: document.getElementById('top-red-cards-table').querySelector('tbody'),
+                adjustStatsTeamSelect: document.getElementById('adjust-stats-team-select'),
+                adjustStatsPlayerSelect: document.getElementById('adjust-stats-player-select'),
+                adjustStatsTypeSelect: document.getElementById('adjust-stats-type-select'),
+                adjustStatsAmount: document.getElementById('adjust-stats-amount'),
+                updatePlayerStatBtn: document.getElementById('update-player-stat-btn'),
 
                 // Knockout
                 knockoutBracketContainer: document.getElementById('knockout-bracket-container'),
@@ -2256,6 +2372,8 @@
                 manageTeamsTable: document.getElementById('manage-teams-table').querySelector('tbody'),
                 addTeamBtn: document.getElementById('add-team-btn'),
                 quickAddTeamBtn: document.getElementById('quick-add-team-btn'),
+                bulkAddTeamsBtn: document.getElementById('bulk-add-teams-btn'),
+                importTournamentTeamsBtn: document.getElementById('import-tournament-teams-btn'),
                 drawGroupsBtn: document.getElementById('draw-groups-btn'),
                 generateFixturesBtn: document.getElementById('generate-fixtures-btn'),
                 generateKnockoutBtn: document.getElementById('generate-knockout-btn'),
@@ -2294,6 +2412,7 @@
                 teamName: document.getElementById('team-name'),
                 teamShortName: document.getElementById('team-short-name'),
                 teamCountry: document.getElementById('team-country'),
+                teamCity: document.getElementById('team-city'), // Added team city input
                 countrySuggestions: document.getElementById('country-suggestions'),
                 teamPrimaryColor: document.getElementById('team-primary-color'),
                 teamSecondaryColor: document.getElementById('team-secondary-color'),
@@ -2305,6 +2424,14 @@
                 importPlayerDataBtn: document.getElementById('import-player-data-btn'),
                 cancelBulkImportBtn: document.getElementById('cancel-bulk-import-btn'),
                 teamModalSaveBtn: document.getElementById('team-modal-save-btn'),
+
+                bulkAddTeamsModal: document.getElementById('bulk-add-teams-modal'),
+                bulkTeamsData: document.getElementById('bulk-teams-data'),
+                bulkTeamsImportBtn: document.getElementById('bulk-teams-import-btn'),
+
+                importTournamentTeamsModal: document.getElementById('import-tournament-teams-modal'),
+                importSourceTournamentSelect: document.getElementById('import-source-tournament-select'),
+                performImportTeamsBtn: document.getElementById('perform-import-teams-btn'),
 
                 importFileInput: document.getElementById('import-file-input'),
                 exportDataBtn: document.getElementById('export-data-btn'),
@@ -2435,6 +2562,17 @@
                 });
                 this.elements.teamModalSaveBtn.addEventListener('click', () => this.saveTeamAndPlayersFromModal());
 
+                // Bulk Add Teams Modal
+                this.elements.bulkAddTeamsBtn.addEventListener('click', () => this.showBulkAddTeamsModal());
+                this.elements.bulkTeamsImportBtn.addEventListener('click', () => this.bulkAddTeamsFromModal());
+
+                // Import Teams from Tournament Modal
+                this.elements.importTournamentTeamsBtn.addEventListener('click', () => this.showImportTeamsFromTournamentModal());
+                this.elements.importSourceTournamentSelect.addEventListener('change', (e) => {
+                    this.elements.performImportTeamsBtn.disabled = !e.target.value;
+                });
+                this.elements.performImportTeamsBtn.addEventListener('click', () => this.importTeamsFromTournament());
+
                 // Import file input
                 this.elements.importFileInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
@@ -2465,6 +2603,14 @@
 
                 // Player stats filter
                 this.elements.playerStatsTeamFilter.addEventListener('change', () => this.renderPlayerStats());
+
+                // Manual Player Stats Adjustment
+                this.elements.adjustStatsTeamSelect.addEventListener('change', () => this.populateAdjustStatsPlayerSelect());
+                this.elements.adjustStatsPlayerSelect.addEventListener('change', () => {
+                    this.elements.updatePlayerStatBtn.disabled = !this.elements.adjustStatsPlayerSelect.value;
+                });
+                this.elements.updatePlayerStatBtn.addEventListener('click', () => this.updatePlayerStatManually());
+
 
                 // Export standings CSV
                 this.elements.exportStandingsCsvBtn.addEventListener('click', () => app.logic.exportStandingsAsCsv(app.data.currentTournamentId));
@@ -2752,7 +2898,7 @@
                 const tournament = app.data.getTournament(app.data.currentTournamentId);
                 if (!tournament) return;
 
-                const fixtures = app.data.getFixtures(tournament.id);
+                const allFixtures = app.data.getFixtures(tournament.id);
                 const teams = app.data.getTeamsInTournament(tournament.id);
 
                 // Populate team filter
@@ -2766,21 +2912,45 @@
                 this.elements.fixtureTeamFilter.value = this.elements.fixtureTeamFilter.value || ''; // Keep selected value
 
                 const filterTeamId = this.elements.fixtureTeamFilter.value;
-                const filteredFixtures = filterTeamId
-                    ? fixtures.filter(f => f.homeTeamId === filterTeamId || f.awayTeamId === filterTeamId)
-                    : fixtures;
+                let filteredFixtures = filterTeamId
+                    ? allFixtures.filter(f => f.homeTeamId === filterTeamId || f.awayTeamId === filterTeamId)
+                    : allFixtures;
 
-                // Sort fixtures by date
-                filteredFixtures.sort((a, b) => new Date(a.date) - new Date(b.date));
+                // Sort fixtures by matchday, then date, then home team name for consistency
+                filteredFixtures.sort((a, b) => {
+                    if (a.matchday !== b.matchday) return a.matchday - b.matchday;
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
+                    if (dateA.getTime() !== dateB.getTime()) return dateA - dateB;
+                    const teamA = app.data.getTeam(a.homeTeamId);
+                    const teamB = app.data.getTeam(b.homeTeamId);
+                    return teamA.name.localeCompare(teamB.name);
+                });
 
                 this.elements.fixturesList.innerHTML = '';
                 if (filteredFixtures.length === 0) {
                     this.elements.fixturesList.innerHTML = '<p class="text-center">No fixtures generated yet.</p>';
                     this.elements.simulateAllFixturesBtn.disabled = true;
                 } else {
-                    filteredFixtures.forEach(fixture => {
-                        this.elements.fixturesList.appendChild(this.createFixtureItem(fixture));
-                    });
+                    const fixturesByMatchday = filteredFixtures.reduce((acc, fixture) => {
+                        (acc[fixture.matchday] = acc[fixture.matchday] || []).push(fixture);
+                        return acc;
+                    }, {});
+
+                    for (const matchdayNum in fixturesByMatchday) {
+                        const matchdayGroup = document.createElement('div');
+                        matchdayGroup.classList.add('fixture-list-group');
+                        matchdayGroup.innerHTML = `<h3>Matchday ${matchdayNum}</h3>`;
+
+                        const fixtureListContainer = document.createElement('div');
+                        fixtureListContainer.classList.add('fixture-list');
+
+                        fixturesByMatchday[matchdayNum].forEach(fixture => {
+                            fixtureListContainer.appendChild(this.createFixtureItem(fixture));
+                        });
+                        matchdayGroup.appendChild(fixtureListContainer);
+                        this.elements.fixturesList.appendChild(matchdayGroup);
+                    }
                     this.elements.simulateAllFixturesBtn.disabled = filteredFixtures.filter(f => f.status === 'scheduled').length === 0;
                 }
 
@@ -2977,7 +3147,7 @@
                 const allPlayers = app.logic.getAllPlayersWithStats(tournament.id);
                 const teamsInTournament = app.data.getTeamsInTournament(tournament.id);
 
-                // Populate team filter
+                // Populate team filter for leaderboards
                 this.elements.playerStatsTeamFilter.innerHTML = '<option value="">All Teams</option>';
                 teamsInTournament.forEach(team => {
                     const option = document.createElement('option');
@@ -3013,6 +3183,53 @@
                 renderLeaderboard(this.elements.topAssistsTable, filteredPlayers, 'assists');
                 renderLeaderboard(this.elements.topYellowCardsTable, filteredPlayers, 'yellowCards');
                 renderLeaderboard(this.elements.topRedCardsTable, filteredPlayers, 'redCards');
+
+                // Populate team select for manual adjustment section
+                this.elements.adjustStatsTeamSelect.innerHTML = '<option value="">Select Team</option>';
+                teamsInTournament.forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team.id;
+                    option.textContent = team.name;
+                    this.elements.adjustStatsTeamSelect.appendChild(option);
+                });
+                this.elements.adjustStatsTeamSelect.value = this.elements.adjustStatsTeamSelect.value || '';
+                this.populateAdjustStatsPlayerSelect(); // Update players when teams are rendered
+            },
+
+            populateAdjustStatsPlayerSelect() {
+                const teamId = this.elements.adjustStatsTeamSelect.value;
+                const playerSelect = this.elements.adjustStatsPlayerSelect;
+                playerSelect.innerHTML = '<option value="">Select Player</option>';
+                playerSelect.disabled = !teamId;
+                this.elements.updatePlayerStatBtn.disabled = true; // Disable until player is selected
+
+                if (teamId) {
+                    const players = app.data.getPlayersInTeam(teamId);
+                    players.forEach(player => {
+                        const option = document.createElement('option');
+                        option.value = player.id;
+                        option.textContent = `${player.name} (#${player.number || 'N/A'})`;
+                        playerSelect.appendChild(option);
+                    });
+                }
+            },
+
+            updatePlayerStatManually() {
+                const tournamentId = app.data.currentTournamentId;
+                const teamId = this.elements.adjustStatsTeamSelect.value;
+                const playerId = this.elements.adjustStatsPlayerSelect.value;
+                const statType = this.elements.adjustStatsTypeSelect.value;
+                const amount = parseInt(this.elements.adjustStatsAmount.value);
+
+                if (!tournamentId || !teamId || !playerId || isNaN(amount)) {
+                    alert('Please select a team, player, stat type, and a valid amount.');
+                    return;
+                }
+
+                app.logic.adjustPlayerStat(tournamentId, teamId, playerId, statType, amount);
+                alert('Player stat updated!');
+                this.renderPlayerStats();
+                this.renderStandings(); // Standings might change due to fair play
             },
 
             renderKnockoutBracket() {
@@ -3299,6 +3516,7 @@
                 this.elements.teamName.value = '';
                 this.elements.teamShortName.value = '';
                 this.elements.teamCountry.value = '';
+                this.elements.teamCity.value = ''; // Clear city field
                 this.elements.teamPrimaryColor.value = '#005792';
                 this.elements.teamSecondaryColor.value = '#FFFFFF';
                 this.elements.bulkImportSection.style.display = 'none';
@@ -3314,6 +3532,7 @@
                         this.elements.teamName.value = team.name;
                         this.elements.teamShortName.value = team.shortName || '';
                         this.elements.teamCountry.value = team.country || '';
+                        this.elements.teamCity.value = team.city || ''; // Populate city field
                         this.elements.teamPrimaryColor.value = team.primaryColor || '#005792';
                         this.elements.teamSecondaryColor.value = team.secondaryColor || '#FFFFFF';
                         players = app.data.getPlayersInTeam(teamId);
@@ -3433,6 +3652,7 @@
                 const name = this.elements.teamName.value.trim();
                 const shortName = this.elements.teamShortName.value.trim().toUpperCase();
                 const country = this.elements.teamCountry.value.trim();
+                const city = this.elements.teamCity.value.trim(); // Get city
                 const primaryColor = this.elements.teamPrimaryColor.value;
                 const secondaryColor = this.elements.teamSecondaryColor.value;
                 const players = this.getPlayersFromModal();
@@ -3466,6 +3686,7 @@
                         currentTeam.name = name;
                         currentTeam.shortName = shortName;
                         currentTeam.country = country;
+                        currentTeam.city = city; // Update city
                         currentTeam.primaryColor = primaryColor;
                         currentTeam.secondaryColor = secondaryColor;
                     }
@@ -3476,6 +3697,7 @@
                         name,
                         shortName,
                         country,
+                        city, // Add city to new team
                         primaryColor,
                         secondaryColor,
                         stats: { P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0, FairPlay: 0 }
@@ -3523,6 +3745,7 @@
                     name: teamName.trim(),
                     shortName: teamName.trim().substring(0, 3).toUpperCase(),
                     country: 'Unknown',
+                    city: 'Unknown', // Default city for quick add
                     primaryColor: '#' + Math.floor(Math.random()*16777215).toString(16), // Random color
                     secondaryColor: '#FFFFFF',
                     stats: { P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0, FairPlay: 0 }
@@ -3530,10 +3753,10 @@
                 app.data.state.teams[newTeamId] = newTeam;
                 tournament.teams.push(newTeamId);
 
-                // Generate 11 placeholder players
+                // Generate 20 placeholder players
                 app.data.state.players[newTeamId] = [];
-                const positions = ['GK', 'DF', 'DF', 'DF', 'MF', 'MF', 'MF', 'FW', 'FW', 'FW', 'DF']; // Example positions
-                for (let i = 0; i < 11; i++) {
+                const positions = ['GK', 'DF', 'DF', 'DF', 'DF', 'MF', 'MF', 'MF', 'MF', 'FW', 'FW', 'FW', 'FW', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB'];
+                for (let i = 0; i < 20; i++) {
                     app.data.state.players[newTeamId].push({
                         id: app.data.generateUniqueId(),
                         teamId: newTeamId,
@@ -3554,7 +3777,7 @@
                 this.renderManageTeamsTable(tournament);
                 this.renderTournamentActions(tournament);
                 this.renderCurrentTournamentView();
-                alert(`Team "${teamName}" and 11 players added!`);
+                alert(`Team "${teamName}" and 20 players added!`);
             },
 
             deleteTeam(teamId) {
@@ -3584,6 +3807,74 @@
                 this.renderManageTeamsTable(tournament);
                 this.renderTournamentActions(tournament);
                 this.renderCurrentTournamentView(); // Re-render to reflect changes
+            },
+
+            // New: Bulk Add Teams
+            showBulkAddTeamsModal() {
+                this.elements.bulkTeamsData.value = '';
+                this.showModal('bulk-add-teams-modal');
+            },
+
+            bulkAddTeamsFromModal() {
+                const tournamentId = app.data.currentTournamentId;
+                if (!tournamentId) {
+                    alert('Please select a tournament first.');
+                    return;
+                }
+                const dataString = this.elements.bulkTeamsData.value.trim();
+                if (!dataString) {
+                    alert('Please paste team data.');
+                    return;
+                }
+                app.logic.bulkAddTeams(tournamentId, dataString);
+                this.hideModal('bulk-add-teams-modal');
+                this.renderManageTeamsTable(app.data.getTournament(tournamentId));
+                this.renderCurrentTournamentView(); // To update buttons etc.
+            },
+
+            // New: Import Teams from Other Tournament
+            showImportTeamsFromTournamentModal() {
+                const select = this.elements.importSourceTournamentSelect;
+                select.innerHTML = '<option value="">Choose a tournament</option>';
+                this.elements.performImportTeamsBtn.disabled = true;
+
+                const currentTournamentId = app.data.currentTournamentId;
+                const otherTournaments = app.data.getTournamentsExcept(currentTournamentId);
+
+                if (otherTournaments.length === 0) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No other tournaments available';
+                    option.disabled = true;
+                    select.appendChild(option);
+                } else {
+                    otherTournaments.forEach(t => {
+                        const option = document.createElement('option');
+                        option.value = t.id;
+                        option.textContent = `${t.name} (${t.mode})`;
+                        select.appendChild(option);
+                    });
+                }
+                this.showModal('import-tournament-teams-modal');
+            },
+
+            importTeamsFromTournament() {
+                const sourceTournamentId = this.elements.importSourceTournamentSelect.value;
+                const targetTournamentId = app.data.currentTournamentId;
+
+                if (!sourceTournamentId || !targetTournamentId) {
+                    alert('Please select a source tournament.');
+                    return;
+                }
+                if (!confirm('Are you sure you want to import teams? This will clear all existing fixtures, standings, and knockout stages for the current tournament.')) {
+                    return;
+                }
+
+                app.logic.importTeamsFromTournament(sourceTournamentId, targetTournamentId);
+                alert('Teams imported successfully!');
+                this.hideModal('import-tournament-teams-modal');
+                this.renderManageTeamsTable(app.data.getTournament(targetTournamentId));
+                this.renderCurrentTournamentView(); // To re-evaluate buttons and render other tabs
             },
 
             drawGroups() {
@@ -3972,6 +4263,18 @@
                 // Any logic initialization if needed
             },
 
+            // New: Poisson distribution for realistic goal generation
+            getPoissonRandom(lambda) {
+                let L = Math.exp(-lambda);
+                let k = 0;
+                let p = 1;
+                do {
+                    k++;
+                    p *= Math.random();
+                } while (p > L);
+                return k - 1;
+            },
+
             createTournament(name, mode) {
                 const newTournament = {
                     id: app.data.generateUniqueId(),
@@ -4020,6 +4323,7 @@
                 }
                 return baseConfig;
             },
+// ... (previous app.logic methods)
 
             // --- Fixture Generation ---
             generateFixtures(tournamentId) {
@@ -4040,64 +4344,211 @@
                         console.error('Groups not drawn for group stage tournament.');
                         return;
                     }
-                    generatedFixtures = this.generateGroupStageFixtures(tournament.id, tournament.groups, tournament.config.groupStageRoundRobinType);
+                    generatedFixtures = this.generateGroupStageFixtures(tournament.id, tournament.groups, tournament.config.groupStageRoundRobinType, tournament.mode);
                 }
 
                 app.data.state.fixtures[tournamentId] = generatedFixtures;
                 app.data.state.standings[tournamentId] = {}; // Clear standings
                 app.data.state.knockout[tournamentId] = null; // Clear knockout
-                app.data.saveState(); // FIX: Save state after generating fixtures
+                app.data.saveState();
             },
 
             generateLeagueFixtures(tournamentId, teams, roundRobinType = 'double') {
-                const numTeams = teams.length;
-                const fixtures = [];
-                const teamIds = teams.map(t => t.id);
+                let teamObjects = teams.map(t => ({ id: t.id, city: t.city || 'Unknown' })); // Include city for clashes
 
-                if (numTeams % 2 !== 0) {
-                    teamIds.push('BYE'); // Add a dummy team for odd number of teams
+                const numTeamsOriginal = teamObjects.length;
+                let numTeamsForAlgorithm = numTeamsOriginal;
+
+                if (numTeamsForAlgorithm % 2 !== 0) {
+                    teamObjects.push({ id: 'BYE', city: 'BYE' }); // Add a dummy team for odd number of teams
+                    numTeamsForAlgorithm++;
                 }
 
-                const numRounds = (teamIds.length - 1); // Number of rounds for single round-robin
-                const half = teamIds.length / 2;
+                const teamIdsForAlgorithm = teamObjects.map(t => t.id);
+                const fixtures = [];
+                const numRounds = numTeamsForAlgorithm - 1; // Number of rounds for single round-robin
+
+                // Identify city clashes for simplification (e.g., Manchester, London)
+                const cityClashGroups = {}; // { 'Manchester': [teamId1, teamId2], ... }
+                teamObjects.forEach(team => {
+                    if (team.id !== 'BYE' && team.city && team.city !== 'Unknown') {
+                        const cityKey = team.city.toLowerCase().trim();
+                        if (!cityClashGroups[cityKey]) cityClashGroups[cityKey] = [];
+                        cityClashGroups[cityKey].push(team.id);
+                    }
+                });
+                const clashingCities = Object.values(cityClashGroups).filter(group => group.length > 1);
+
+                let currentMatchday = 1;
+                let startDate = new Date(); // Start date for fixtures
 
                 for (let round = 0; round < numRounds; round++) {
-                    for (let i = 0; i < half; i++) {
-                        const homeTeamId = teamIds[i];
-                        const awayTeamId = teamIds[teamIds.length - 1 - i];
+                    let matchdayFixtures = [];
+                    let teamsPlayingHomeThisMatchday = new Set();
+                    let currentRoundTeams = [...teamIdsForAlgorithm]; // Clone for rotation
 
-                        if (homeTeamId !== 'BYE' && awayTeamId !== 'BYE') {
-                            // First leg
-                            fixtures.push({
+                    for (let i = 0; i < numTeamsForAlgorithm / 2; i++) {
+                        let homeTeamId = currentRoundTeams[i];
+                        let awayTeamId = currentRoundTeams[numTeamsForAlgorithm - 1 - i];
+
+                        if (homeTeamId === 'BYE' || awayTeamId === 'BYE') continue;
+
+                        const homeTeam = app.data.getTeam(homeTeamId);
+                        const awayTeam = app.data.getTeam(awayTeamId);
+
+                        // Simple home/away balancing + city clash check
+                        let isHomePreferredForHomeTeam = true; // Default for first leg
+                        if (roundRobinType === 'double' && round >= numRounds) { // For second leg, prefer away for original home team
+                            isHomePreferredForHomeTeam = false;
+                        }
+
+                        let actualHomeTeamId = homeTeamId;
+                        let actualAwayTeamId = awayTeamId;
+
+                        // Check city clashes
+                        let clashDetected = false;
+                        for (const clashGroup of clashingCities) {
+                            if (clashGroup.includes(homeTeamId) && clashGroup.some(id => teamsPlayingHomeThisMatchday.has(id) && id !== homeTeamId)) {
+                                clashDetected = true;
+                                break;
+                            }
+                            if (clashGroup.includes(awayTeamId) && clashGroup.some(id => teamsPlayingHomeThisMatchday.has(id) && id !== awayTeamId)) {
+                                clashDetected = true;
+                                break;
+                            }
+                        }
+
+                        if (clashDetected) {
+                            // If clash, try to flip home/away
+                            if (isHomePreferredForHomeTeam) { // If homeTeamId was supposed to be home
+                                actualHomeTeamId = awayTeamId;
+                                actualAwayTeamId = homeTeamId;
+                                // Re-check if this flip resolves the clash or creates a new one
+                                if (clashGroup.includes(actualHomeTeamId) && clashGroup.some(id => teamsPlayingHomeThisMatchday.has(id) && id !== actualHomeTeamId)) {
+                                     // If flipping still causes a clash, just proceed. It's a greedy algorithm.
+                                    actualHomeTeamId = homeTeamId;
+                                    actualAwayTeamId = awayTeamId;
+                                }
+                            }
+                        }
+                        
+                        // Ensure one of them becomes home
+                        if (!teamsPlayingHomeThisMatchday.has(actualHomeTeamId) && actualHomeTeamId !== 'BYE') {
+                            teamsPlayingHomeThisMatchday.add(actualHomeTeamId);
+                        } else if (!teamsPlayingHomeThisMatchday.has(actualAwayTeamId) && actualAwayTeamId !== 'BYE') {
+                            [actualHomeTeamId, actualAwayTeamId] = [actualAwayTeamId, actualHomeTeamId]; // Flip if original home is taken
+                            teamsPlayingHomeThisMatchday.add(actualHomeTeamId);
+                        } else {
+                            // Both teams from the pair would clash if home, just pick the first one as home
+                            // This might break perfect city clash handling for edge cases, but keeps generation simpler
+                            teamsPlayingHomeThisMatchday.add(actualHomeTeamId);
+                        }
+
+                        matchdayFixtures.push({
+                            id: app.data.generateUniqueId(),
+                            tournamentId,
+                            date: new Date(startDate.getTime()).toISOString(), // Use start date of matchday
+                            homeTeamId: actualHomeTeamId,
+                            awayTeamId: actualAwayTeamId,
+                            stage: 'league',
+                            matchday: currentMatchday,
+                            leg: 1, // Will be updated for second leg later if double RR
+                            status: 'scheduled',
+                            score: { home: null, away: null },
+                            events: []
+                        });
+                    }
+                    fixtures.push(...matchdayFixtures);
+                    currentMatchday++;
+                    startDate.setDate(startDate.getDate() + 7); // Advance date by 7 days for next matchday
+
+                    // Rotate teams (Fixed teamIdsForAlgorithm[0] does not rotate)
+                    const lastTeam = teamIdsForAlgorithm.pop();
+                    teamIdsForAlgorithm.splice(1, 0, lastTeam);
+                }
+
+                // Generate second leg if double round-robin
+                if (roundRobinType === 'double') {
+                    const firstLegFixtures = [...fixtures]; // Clone to not modify original
+                    for (let round = 0; round < numRounds; round++) {
+                        let matchdayFixtures = [];
+                        let teamsPlayingHomeThisMatchday = new Set();
+                        let currentRoundTeams = [...teamIdsForAlgorithm]; // Reset for rotation
+
+                        for (let i = 0; i < numTeamsForAlgorithm / 2; i++) {
+                            let homeTeamId = currentRoundTeams[i];
+                            let awayTeamId = currentRoundTeams[numTeamsForAlgorithm - 1 - i];
+
+                            if (homeTeamId === 'BYE' || awayTeamId === 'BYE') continue;
+
+                            const firstLegMatch = firstLegFixtures.find(f =>
+                                f.matchday === round + 1 && // Matchday corresponds to the round number
+                                ((f.homeTeamId === homeTeamId && f.awayTeamId === awayTeamId) || (f.homeTeamId === awayTeamId && f.awayTeamId === homeTeamId))
+                            );
+
+                            let actualHomeTeamId, actualAwayTeamId;
+
+                            if (firstLegMatch) {
+                                // For second leg, flip home/away from first leg
+                                actualHomeTeamId = firstLegMatch.awayTeamId;
+                                actualAwayTeamId = firstLegMatch.homeTeamId;
+                            } else {
+                                // Fallback if first leg not found (shouldn't happen with correct logic)
+                                homeTeamId = team1Id; // These were never defined, let's correct this.
+                                awayTeamId = team2Id; // Should use the currently derived home/away from rotation
+                            }
+
+                             // Apply city clash again for second leg, prioritizing keeping teams from clashing
+                            let clashDetected = false;
+                            for (const clashGroup of clashingCities) {
+                                if (clashGroup.includes(actualHomeTeamId) && clashGroup.some(id => teamsPlayingHomeThisMatchday.has(id) && id !== actualHomeTeamId)) {
+                                    clashDetected = true;
+                                    break;
+                                }
+                            }
+
+                            if (clashDetected) {
+                                [actualHomeTeamId, actualAwayTeamId] = [actualAwayTeamId, actualHomeTeamId]; // Flip to avoid clash
+                                // Re-check if flip worked, if not, just accept for now
+                                if (clashGroup.includes(actualHomeTeamId) && clashGroup.some(id => teamsPlayingHomeThisMatchday.has(id) && id !== actualHomeTeamId)) {
+                                    // Could not resolve by flipping, revert and just accept for now
+                                    [actualHomeTeamId, actualAwayTeamId] = [actualAwayTeamId, actualHomeTeamId];
+                                }
+                            }
+
+                             // Ensure one of them becomes home
+                            if (!teamsPlayingHomeThisMatchday.has(actualHomeTeamId) && actualHomeTeamId !== 'BYE') {
+                                teamsPlayingHomeThisMatchday.add(actualHomeTeamId);
+                            } else if (!teamsPlayingHomeThisMatchday.has(actualAwayTeamId) && actualAwayTeamId !== 'BYE') {
+                                [actualHomeTeamId, actualAwayTeamId] = [actualAwayTeamId, actualHomeTeamId]; // Flip if original home is taken
+                                teamsPlayingHomeThisMatchday.add(actualHomeTeamId);
+                            } else {
+                                teamsPlayingHomeThisMatchday.add(actualHomeTeamId);
+                            }
+
+
+                            matchdayFixtures.push({
                                 id: app.data.generateUniqueId(),
                                 tournamentId,
-                                date: new Date(Date.now() + (round * 7 * 24 * 60 * 60 * 1000)).toISOString(), // Weekly matches
-                                homeTeamId: homeTeamId,
-                                awayTeamId: awayTeamId,
+                                date: new Date(startDate.getTime()).toISOString(),
+                                homeTeamId: actualHomeTeamId,
+                                awayTeamId: actualAwayTeamId,
                                 stage: 'league',
-                                leg: 1,
+                                matchday: currentMatchday,
+                                leg: 2,
                                 status: 'scheduled',
                                 score: { home: null, away: null },
                                 events: []
                             });
                         }
+                        fixtures.push(...matchdayFixtures);
+                        currentMatchday++;
+                        startDate.setDate(startDate.getDate() + 7); // Advance date by 7 days for next matchday
+
+                        // Rotate teams (Fixed teamIdsForAlgorithm[0] does not rotate)
+                        const lastTeam = teamIdsForAlgorithm.pop();
+                        teamIdsForAlgorithm.splice(1, 0, lastTeam);
                     }
-
-                    // Rotate teams (Berger table method)
-                    const lastTeam = teamIds.pop();
-                    teamIds.splice(1, 0, lastTeam);
-                }
-
-                if (roundRobinType === 'double') {
-                    const secondLegFixtures = fixtures.map(f => ({
-                        ...f,
-                        id: app.data.generateUniqueId(),
-                        homeTeamId: f.awayTeamId, // Swap home and away
-                        awayTeamId: f.homeTeamId,
-                        leg: 2,
-                        date: new Date(new Date(f.date).getTime() + (numRounds * 7 * 24 * 60 * 60 * 1000)).toISOString(), // Offset dates for second leg
-                    }));
-                    fixtures.push(...secondLegFixtures);
                 }
 
                 return fixtures;
@@ -4165,70 +4616,114 @@
                 }
 
                 tournament.groups = groups;
-                app.data.saveState(); // FIX: Save state after drawing groups
+                app.data.saveState();
             },
 
-            generateGroupStageFixtures(tournamentId, groups, roundRobinType = 'single') {
+            generateGroupStageFixtures(tournamentId, groups, roundRobinType = 'single', mode) {
                 const fixtures = [];
-                let fixtureDate = new Date();
+                let currentMatchday = 1;
+                let baseDate = new Date(); // Start date for the first matchday across all groups
 
-                for (const groupId in groups) {
-                    const teamIds = groups[groupId];
-                    const numTeams = teamIds.length;
+                // Calculate total matchdays for group stage
+                const firstGroupKey = Object.keys(groups)[0];
+                const numTeamsInGroup = groups[firstGroupKey].length; // Assuming all groups have same size
+                const numMatchdaysPerGroup = (numTeamsInGroup - 1) * (roundRobinType === 'double' ? 2 : 1);
+                // The total matchdays for the tournament's group stage is simply numMatchdaysPerGroup,
+                // as all groups play on the same matchday.
+                const totalTournamentMatchdays = numMatchdaysPerGroup;
 
-                    if (numTeams < 2) continue;
+                for (let md = 1; md <= totalTournamentMatchdays; md++) {
+                    let matchdayDate = new Date(baseDate.getTime());
+                    matchdayDate.setDate(baseDate.getDate() + (md - 1) * 7); // Advance date by 7 days for each matchday
 
-                    // Generate round-robin for each group
-                    const groupFixtures = [];
-                    // Using Berger table method for round-robin within groups for better home/away balance
-                    let currentGroupTeamIds = [...teamIds];
-                    if (numTeams % 2 !== 0) {
-                        currentGroupTeamIds.push('BYE');
-                    }
-                    const numGroupRounds = currentGroupTeamIds.length - 1;
-                    const half = currentGroupTeamIds.length / 2;
+                    const matchesForCurrentMatchday = [];
 
-                    for (let round = 0; round < numGroupRounds; round++) {
-                        for (let i = 0; i < half; i++) {
-                            const homeTeamId = currentGroupTeamIds[i];
-                            const awayTeamId = currentGroupTeamIds[currentGroupTeamIds.length - 1 - i];
+                    for (const groupId in groups) {
+                        const teamIds = groups[groupId];
+                        let teamsInThisGroup = [...teamIds];
 
-                            if (homeTeamId !== 'BYE' && awayTeamId !== 'BYE') {
-                                // First leg
-                                groupFixtures.push({
-                                    id: app.data.generateUniqueId(),
-                                    tournamentId,
-                                    date: new Date(fixtureDate.getTime()).toISOString(),
-                                    homeTeamId: homeTeamId,
-                                    awayTeamId: awayTeamId,
-                                    stage: 'group',
-                                    groupId: groupId,
-                                    leg: 1,
-                                    status: 'scheduled',
-                                    score: { home: null, away: null },
-                                    events: []
-                                });
-                            }
+                        if (teamsInThisGroup.length % 2 !== 0) {
+                            teamsInThisGroup.push('BYE'); // Add a dummy team
                         }
-                        // Rotate teams
-                        const lastTeam = currentGroupTeamIds.pop();
-                        currentGroupTeamIds.splice(1, 0, lastTeam);
-                    }
 
-                    if (roundRobinType === 'double') {
-                        const secondLegFixtures = groupFixtures.map(f => ({
-                            ...f,
-                            id: app.data.generateUniqueId(),
-                            homeTeamId: f.awayTeamId, // Swap home and away
-                            awayTeamId: f.homeTeamId,
-                            leg: 2,
-                            date: new Date(new Date(f.date).getTime() + (numGroupRounds * 7 * 24 * 60 * 60 * 1000)).toISOString(), // Offset dates for second leg
-                        }));
-                        fixtures.push(...secondLegFixtures);
+                        const numTeamsAlgorithm = teamsInThisGroup.length;
+                        const numGroupRounds = numTeamsAlgorithm - 1; // Number of rounds for a single RR
+
+                        let roundToGenerate = md; // This is the logical round index (1 to numMatchdaysPerGroup)
+
+                        // Apply the circle method to get pairings for the specific round
+                        let rotatedTeams = [...teamsInThisGroup];
+                        // Perform (roundToGenerate - 1) rotations to get the pairings for this round
+                        for (let r = 0; r < (roundToGenerate - 1); r++) {
+                            const last = rotatedTeams.pop();
+                            rotatedTeams.splice(1, 0, last);
+                        }
+
+                        // Generate matches for this specific logical round (md)
+                        for (let i = 0; i < numTeamsAlgorithm / 2; i++) {
+                            const team1Id = rotatedTeams[i];
+                            const team2Id = rotatedTeams[numTeamsAlgorithm - 1 - i];
+
+                            if (team1Id === 'BYE' || team2Id === 'BYE') continue;
+
+                            let homeTeamId, awayTeamId;
+                            let leg = 1;
+
+                            if (roundRobinType === 'double' && md > numGroupRounds) { // Second leg fixtures
+                                const firstLegRound = md - numGroupRounds;
+                                // Find the corresponding first leg match to flip home/away
+                                const firstLegMatch = fixtures.find(f =>
+                                    f.groupId === groupId &&
+                                    f.matchday === firstLegRound &&
+                                    ((f.homeTeamId === team1Id && f.awayTeamId === team2Id) || (f.homeTeamId === team2Id && f.awayTeamId === team1Id))
+                                );
+                                if (firstLegMatch) {
+                                    homeTeamId = firstLegMatch.awayTeamId;
+                                    awayTeamId = firstLegMatch.homeTeamId;
+                                } else {
+                                    // Fallback: This should ideally not happen if logic is sound
+                                    homeTeamId = team1Id;
+                                    awayTeamId = team2Id;
+                                }
+                                leg = 2;
+                            } else { // First leg (or single RR)
+                                homeTeamId = team1Id;
+                                awayTeamId = team2Id;
+                            }
+
+                            matchesForCurrentMatchday.push({
+                                id: app.data.generateUniqueId(),
+                                tournamentId,
+                                date: new Date(matchdayDate.getTime()).toISOString(),
+                                homeTeamId: homeTeamId,
+                                awayTeamId: awayTeamId,
+                                stage: 'group',
+                                groupId: groupId,
+                                matchday: md,
+                                leg: leg,
+                                status: 'scheduled',
+                                score: { home: null, away: null },
+                                events: []
+                            });
+                        }
                     }
-                    fixtures.push(...groupFixtures);
-                    fixtureDate.setDate(fixtureDate.getDate() + 7); // Advance date for next group's first match
+                    fixtures.push(...matchesForCurrentMatchday);
                 }
+
+                // World Cup Specific: Ensure final matchday games are simultaneous within each group
+                if (mode === 'worldcup') {
+                    const finalMatchdayNum = totalTournamentMatchdays;
+                    // Use a fixed time for all final matches globally
+                    const finalMatchdayFixedDate = new Date();
+                    finalMatchdayFixedDate.setHours(15, 0, 0, 0); // e.g., 3 PM local time for simplicity
+
+                    fixtures.forEach(fixture => {
+                        if (fixture.matchday === finalMatchdayNum && fixture.stage === 'group') {
+                            fixture.date = finalMatchdayFixedDate.toISOString();
+                        }
+                    });
+                }
+                
                 return fixtures;
             },
 
@@ -4262,6 +4757,13 @@
                 let currentRoundTeamIds = qualifiedTeamIds; // Actual team IDs for the first round
                 let roundNumber = 1;
                 let fixtureDate = new Date();
+                fixtureDate.setDate(fixtureDate.getDate() + 14); // Start knockout stage 2 weeks after group stage ends
+
+                // Determine the starting matchday for knockout
+                const existingFixtures = app.data.getFixtures(tournamentId);
+                const maxMatchday = existingFixtures.length > 0 ? Math.max(...existingFixtures.map(f => f.matchday || 0)) : 0;
+                let currentMatchday = maxMatchday + 1;
+
 
                 while (currentRoundTeamIds.length >= 2) {
                     const numTeamsInRound = currentRoundTeamIds.length;
@@ -4290,6 +4792,7 @@
                             awayTeamId: awayTeamId,
                             stage: 'knockout',
                             roundId: roundId,
+                            matchday: currentMatchday, // Assign matchday for knockout rounds
                             leg: 1,
                             status: 'scheduled',
                             score: { home: null, away: null },
@@ -4308,6 +4811,7 @@
                                 awayTeamId: homeTeamId, // Initially null for later rounds
                                 stage: 'knockout',
                                 roundId: roundId,
+                                matchday: currentMatchday + 1, // Second leg is on the next matchday
                                 leg: 2,
                                 status: 'scheduled',
                                 score: { home: null, away: null },
@@ -4331,12 +4835,13 @@
                     // For the next iteration, `currentRoundTeamIds` will be the `nextRoundTeamIds` of the round we just created.
                     // This ensures that subsequent rounds start with nulls for their team IDs.
                     currentRoundTeamIds = knockout.rounds[knockout.rounds.length - 1].nextRoundTeamIds;
-                    fixtureDate.setDate(fixtureDate.getDate() + 14);
+                    fixtureDate.setDate(fixtureDate.getDate() + 14); // Advance 2 weeks for the next round (or 1 week if no 2nd leg)
+                    currentMatchday += (tournament.mode === 'champions' && numTeamsInRound > 2) ? 2 : 1;
                     roundNumber++;
                 }
 
                 app.data.state.knockout[tournamentId] = knockout;
-                app.data.saveState(); // FIX: Save state after generating knockout fixtures
+                app.data.saveState();
             },
 
             getQualifiedTeams(tournamentId) {
@@ -4368,11 +4873,12 @@
 
             // --- Match Simulation & Result Update ---
             simulateMatch(homeTeamId, awayTeamId) {
-                // Simple random score generation, capped to avoid extreme results
-                const generateGoals = () => Math.floor(Math.random() * 4); // 0-3 goals
+                // Realistic goal generation using Poisson distribution
+                // Lambda (average goals per team per game) can be tweaked
+                const lambda = 1.5; // For instance, average 1.5 goals per team
                 return {
-                    home: generateGoals(),
-                    away: generateGoals()
+                    home: this.getPoissonRandom(lambda),
+                    away: this.getPoissonRandom(lambda)
                 };
             },
 
@@ -4402,8 +4908,8 @@
                 // Update team and player stats
                 this.applyMatchStats(tournamentId, fixture);
 
-                app.data.saveState(); // FIX: Save state after updating match result
-                this.updateKnockoutBracket(tournamentId); // FIX: Update bracket if knockout
+                app.data.saveState();
+                this.updateKnockoutBracket(tournamentId);
             },
 
             revertMatchStats(tournamentId, fixture) {
@@ -4466,9 +4972,9 @@
                 // Revert minutes played (simplified)
                 const minutesPlayed = fixture.extraTime ? 120 : 90;
                 const homePlayers = app.data.getPlayersInTeam(fixture.homeTeamId);
-                homePlayers.forEach(p => p.stats.minutes -= minutesPlayed);
+                homePlayers.forEach(p => p.stats.minutes = Math.max(0, p.stats.minutes - minutesPlayed));
                 const awayPlayers = app.data.getPlayersInTeam(fixture.awayTeamId);
-                awayPlayers.forEach(p => p.stats.minutes -= minutesPlayed);
+                awayPlayers.forEach(p => p.stats.minutes = Math.max(0, p.stats.minutes - minutesPlayed));
             },
 
             applyMatchStats(tournamentId, fixture) {
@@ -4533,6 +5039,27 @@
                 const awayPlayers = app.data.getPlayersInTeam(fixture.awayTeamId);
                 awayPlayers.forEach(p => p.stats.minutes += minutesPlayed);
             },
+
+            // New: Adjust player stat manually
+            adjustPlayerStat(tournamentId, teamId, playerId, statType, valueChange) {
+                const player = app.data.getPlayer(teamId, playerId);
+                const team = app.data.getTeam(teamId);
+                if (!player || !team) return;
+
+                player.stats[statType] = Math.max(0, player.stats[statType] + valueChange);
+
+                // Update team FairPlay if it's a card stat
+                if (statType === 'yellowCards') {
+                    team.stats.FairPlay = Math.max(0, team.stats.FairPlay + valueChange);
+                } else if (statType === 'redCards') {
+                    team.stats.FairPlay = Math.max(0, team.stats.FairPlay + (valueChange * 3)); // Red card counts as 3 points
+                }
+
+                app.data.saveState();
+                console.log(`Player ${player.name}'s ${statType} adjusted by ${valueChange}. New value: ${player.stats[statType]}`);
+                // No need to re-calculate standings/fixtures directly here, UI will re-render them
+            },
+
 
             determineKnockoutWinner(tournamentId, fixture) {
                 const tournament = app.data.getTournament(tournamentId);
@@ -4716,7 +5243,7 @@
                                     processedTies.add(tieKey);
                                     console.log(`      Tie winner for ${fixture.homeTeamId} vs ${fixture.awayTeamId} (Round ${currentRound.name}): ${winnerIdForTie}`);
                                 } else {
-                                    // If aggregate not determined (e.g., second leg not played or not all played),
+                                    // If aggregate not determined (e.g., second leg not played),
                                     // or if there's no winner yet (still tied after all rules),
                                     // then the round is not fully played.
                                     if (fixture.status !== 'played' || !aggregate || !aggregate.winnerId) {
@@ -4933,53 +5460,6 @@
                 return standingsArray;
             },
 
-            compareHeadToHead(teamAStats, teamBStats, statKey, allTeamsInScope) {
-                // Only apply H2H if both teams are part of the same tied group
-                // and have played each other.
-                const teamAId = teamAStats.teamId;
-                const teamBId = teamBStats.teamId;
-
-                const h2hFixtures = app.data.getFixtures(app.data.currentTournamentId)
-                    .filter(f => f.status === 'played' &&
-                                  ((f.homeTeamId === teamAId && f.awayTeamId === teamBId) ||
-                                   (f.homeTeamId === teamBId && f.awayTeamId === teamAId)));
-
-                if (h2hFixtures.length === 0) return 0; // No head-to-head matches
-
-                let h2hA = { Pts: 0, GF: 0, GA: 0, GD: 0 };
-                let h2hB = { Pts: 0, GF: 0, GA: 0, GD: 0 };
-
-                h2hFixtures.forEach(f => {
-                    const config = app.data.getTournament(app.data.currentTournamentId).config;
-                    if (f.homeTeamId === teamAId) {
-                        h2hA.GF += f.score.home;
-                        h2hA.GA += f.score.away;
-                        h2hB.GF += f.score.away;
-                        h2hB.GA += f.score.home;
-                        if (f.score.home > f.score.away) h2hA.Pts += config.pointsWin;
-                        else if (f.score.home < f.score.away) h2hB.Pts += config.pointsWin;
-                        else { h2hA.Pts += config.pointsDraw; h2hB.Pts += config.pointsDraw; }
-                    } else { // f.homeTeamId === teamBId
-                        h2hB.GF += f.score.home;
-                        h2hB.GA += f.score.away;
-                        h2hA.GF += f.score.away;
-                        h2hA.GA += f.score.home;
-                        if (f.score.home > f.score.away) h2hB.Pts += config.pointsWin;
-                        else if (f.score.home < f.score.away) h2hA.Pts += config.pointsWin;
-                        else { h2hA.Pts += config.pointsDraw; h2hB.Pts += config.pointsDraw; }
-                    }
-                });
-
-                h2hA.GD = h2hA.GF - h2hA.GA;
-                h2hB.GD = h2hB.GF - h2hB.GA;
-
-                if (statKey === 'Pts') return h2hB.Pts - h2hA.Pts;
-                if (statKey === 'GD') return h2hB.GD - h2hA.GD;
-                if (statKey === 'GF') return h2hB.GF - h2hA.GF;
-
-                return 0;
-            },
-
             getAllPlayersWithStats(tournamentId) {
                 const tournament = app.data.getTournament(tournamentId);
                 if (!tournament) return [];
@@ -5063,8 +5543,11 @@
                 const fixtures = app.data.getFixtures(tournamentId);
                 const scheduledFixtures = fixtures.filter(f => f.status === 'scheduled');
 
-                // FIX: Sort scheduled fixtures by date to ensure earlier rounds are simulated first
-                scheduledFixtures.sort((a, b) => new Date(a.date) - new Date(b.date));
+                // Sort scheduled fixtures by matchday, then date to ensure earlier rounds are simulated first
+                scheduledFixtures.sort((a, b) => {
+                    if (a.matchday !== b.matchday) return a.matchday - b.matchday;
+                    return new Date(a.date) - new Date(b.date);
+                });
 
                 for (const fixture of scheduledFixtures) {
                     const simulatedScore = this.simulateMatch(fixture.homeTeamId, fixture.awayTeamId);
@@ -5088,8 +5571,128 @@
                     }
                     this.updateMatchResult(tournamentId, fixture.id, simulatedScore, [], extraTime, penalties);
                 }
-                app.data.saveState(); // FIX: Save state after simulating all fixtures
+                app.data.saveState();
             },
+
+            // New: Bulk Add Teams
+            bulkAddTeams(tournamentId, dataString) {
+                const tournament = app.data.getTournament(tournamentId);
+                if (!tournament) {
+                    console.error('Tournament not found for bulk team addition.');
+                    return;
+                }
+
+                let importedTeamsData = [];
+                try {
+                    // Try JSON first
+                    const parsedJson = JSON.parse(dataString);
+                    if (Array.isArray(parsedJson)) {
+                        importedTeamsData = parsedJson;
+                    } else {
+                        throw new Error('JSON data is not an array.');
+                    }
+                } catch (jsonError) {
+                    // If JSON fails, try CSV
+                    const lines = dataString.split('\n').filter(line => line.trim() !== '');
+                    importedTeamsData = lines.map(line => {
+                        const parts = line.split(',').map(p => p.trim());
+                        return {
+                            name: parts[0] || `New Team ${app.data.uniqueIdCounter}`,
+                            shortName: parts[1] || (parts[0] ? parts[0].substring(0, 3).toUpperCase() : 'UNK'),
+                            country: parts[2] || 'Unknown',
+                            city: parts[3] || 'Unknown', // Added city parsing
+                            primaryColor: parts[4] || '#' + Math.floor(Math.random() * 16777215).toString(16),
+                            secondaryColor: parts[5] || '#FFFFFF',
+                        };
+                    });
+                }
+
+                importedTeamsData.forEach(teamData => {
+                    const newTeamId = app.data.generateUniqueId();
+                    const newTeam = {
+                        id: newTeamId,
+                        name: teamData.name,
+                        shortName: teamData.shortName,
+                        country: teamData.country,
+                        city: teamData.city, // Assign city
+                        primaryColor: teamData.primaryColor,
+                        secondaryColor: teamData.secondaryColor,
+                        stats: { P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0, FairPlay: 0 }
+                    };
+                    app.data.state.teams[newTeamId] = newTeam;
+                    tournament.teams.push(newTeamId);
+
+                    // Add 20 default players
+                    app.data.state.players[newTeamId] = [];
+                    const positions = ['GK', 'DF', 'DF', 'DF', 'DF', 'MF', 'MF', 'MF', 'MF', 'FW', 'FW', 'FW', 'FW', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB'];
+                    for (let i = 0; i < 20; i++) {
+                        app.data.state.players[newTeamId].push({
+                            id: app.data.generateUniqueId(),
+                            teamId: newTeamId,
+                            name: `Player ${i + 1}`,
+                            number: i + 1,
+                            position: positions[i] || 'Unknown',
+                            stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 }
+                        });
+                    }
+                });
+
+                // Clear tournament's derived data to force regeneration
+                delete app.data.state.fixtures[tournamentId];
+                delete app.data.state.standings[tournamentId];
+                delete app.data.state.knockout[tournamentId];
+                delete tournament.groups; // Clear groups if any
+
+                app.data.saveState();
+                alert(`${importedTeamsData.length} teams added successfully!`);
+            },
+
+            // New: Import Teams from another Tournament
+            importTeamsFromTournament(sourceTournamentId, targetTournamentId) {
+                const sourceTournament = app.data.getTournament(sourceTournamentId);
+                const targetTournament = app.data.getTournament(targetTournamentId);
+
+                if (!sourceTournament || !targetTournament) {
+                    console.error('Source or target tournament not found for team import.');
+                    return;
+                }
+
+                const teamsToImport = app.data.getTeamsInTournament(sourceTournamentId);
+                if (teamsToImport.length === 0) {
+                    alert('No teams found in the source tournament to import.');
+                    return;
+                }
+
+                teamsToImport.forEach(sourceTeam => {
+                    // Create new unique IDs for the imported team and its players
+                    const newTeamId = app.data.generateUniqueId();
+                    const newTeam = {
+                        ...sourceTeam,
+                        id: newTeamId,
+                        stats: { P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0, FairPlay: 0 } // Reset stats for new tournament
+                    };
+                    app.data.state.teams[newTeamId] = newTeam;
+                    targetTournament.teams.push(newTeamId);
+
+                    const sourcePlayers = app.data.getPlayersInTeam(sourceTeam.id);
+                    app.data.state.players[newTeamId] = sourcePlayers.map(p => ({
+                        ...p,
+                        id: app.data.generateUniqueId(), // New ID for player
+                        teamId: newTeamId,
+                        stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 } // Reset player stats
+                    }));
+                });
+
+                // Clear target tournament's derived data to force regeneration
+                delete app.data.state.fixtures[targetTournamentId];
+                delete app.data.state.standings[targetTournamentId];
+                delete app.data.state.knockout[targetTournamentId];
+                delete targetTournament.groups;
+
+                app.data.saveState();
+                console.log(`Teams imported from ${sourceTournament.name} to ${targetTournament.name}`);
+            },
+
 
             // --- Demo Data Seeding ---
             seedDemoData() {
@@ -5106,16 +5709,16 @@
 
                 // Seed League Tournament
                 const leagueTeamsData = [
-                    { name: 'Manchester Utd', shortName: 'MUN', country: 'England', primaryColor: '#DA291C', secondaryColor: '#FBE122' },
-                    { name: 'Liverpool FC', shortName: 'LIV', country: 'England', primaryColor: '#C8102E', secondaryColor: '#00B2A9' },
-                    { name: 'Arsenal FC', shortName: 'ARS', country: 'England', primaryColor: '#EF0107', secondaryColor: '#005792' },
-                    { name: 'Chelsea FC', shortName: 'CHE', country: 'England', primaryColor: '#034694', secondaryColor: '#6A7AB5' },
-                    { name: 'Tottenham Hotspur', shortName: 'TOT', country: 'England', primaryColor: '#132257', secondaryColor: '#FFFFFF' },
-                    { name: 'Manchester City', shortName: 'MCI', country: 'England', primaryColor: '#6CABDD', secondaryColor: '#1C2C5B' },
-                    { name: 'Newcastle Utd', shortName: 'NEW', country: 'England', primaryColor: '#241F20', secondaryColor: '#FFFFFF' },
-                    { name: 'Aston Villa', shortName: 'AVL', country: 'England', primaryColor: '#410E2B', secondaryColor: '#95BFE5' },
-                    { name: 'Everton FC', shortName: 'EVE', country: 'England', primaryColor: '#003399', secondaryColor: '#FFFFFF' },
-                    { name: 'West Ham Utd', shortName: 'WHU', country: 'England', primaryColor: '#7A263A', secondaryColor: '#1BB1E7' },
+                    { name: 'Manchester Utd', shortName: 'MUN', country: 'England', city: 'Manchester', primaryColor: '#DA291C', secondaryColor: '#FBE122' },
+                    { name: 'Liverpool FC', shortName: 'LIV', country: 'England', city: 'Liverpool', primaryColor: '#C8102E', secondaryColor: '#00B2A9' },
+                    { name: 'Arsenal FC', shortName: 'ARS', country: 'England', city: 'London', primaryColor: '#EF0107', secondaryColor: '#005792' },
+                    { name: 'Chelsea FC', shortName: 'CHE', country: 'England', city: 'London', primaryColor: '#034694', secondaryColor: '#6A7AB5' },
+                    { name: 'Tottenham Hotspur', shortName: 'TOT', country: 'England', city: 'London', primaryColor: '#132257', secondaryColor: '#FFFFFF' },
+                    { name: 'Manchester City', shortName: 'MCI', country: 'England', city: 'Manchester', primaryColor: '#6CABDD', secondaryColor: '#1C2C5B' },
+                    { name: 'Newcastle Utd', shortName: 'NEW', country: 'England', city: 'Newcastle', primaryColor: '#241F20', secondaryColor: '#FFFFFF' },
+                    { name: 'Aston Villa', shortName: 'AVL', country: 'England', city: 'Birmingham', primaryColor: '#410E2B', secondaryColor: '#95BFE5' },
+                    { name: 'Everton FC', shortName: 'EVE', country: 'England', city: 'Liverpool', primaryColor: '#003399', secondaryColor: '#FFFFFF' },
+                    { name: 'West Ham Utd', shortName: 'WHU', country: 'England', city: 'London', primaryColor: '#7A263A', secondaryColor: '#1BB1E7' },
                 ];
                 const leaguePlayersData = {
                     'MUN': [{ name: 'Rashford', number: 10, position: 'FW' }, { name: 'Fernandes', number: 8, position: 'MF' }, { name: 'Onana', number: 24, position: 'GK' }],
@@ -5134,76 +5737,146 @@
                     const teamId = app.data.generateUniqueId();
                     app.data.state.teams[teamId] = { id: teamId, ...teamData, stats: { P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0, FairPlay: 0 } };
                     leagueTournament.teams.push(teamId);
-                    app.data.state.players[teamId] = (leaguePlayersData[teamData.shortName] || []).map(p => ({ id: app.data.generateUniqueId(), teamId, ...p, stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 } }));
+                    // Add 20 players for each team, with specific ones for demo, others as placeholders
+                    const allTeamPlayers = [];
+                    const usedNumbers = new Set();
+
+                    // Add specific players first
+                    const specificPlayers = leaguePlayersData[teamData.shortName] || [];
+                    specificPlayers.forEach(p => {
+                        allTeamPlayers.push({ id: app.data.generateUniqueId(), teamId, ...p, stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 } });
+                        if (p.number) usedNumbers.add(p.number);
+                    });
+
+                    // Fill up to 20 players with placeholders
+                    const positions = ['GK', 'DF', 'DF', 'DF', 'DF', 'MF', 'MF', 'MF', 'MF', 'FW', 'FW', 'FW', 'FW', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB'];
+                    for (let i = 0; allTeamPlayers.length < 20 && i < positions.length; i++) {
+                        let playerNumber = i + 1;
+                        while (usedNumbers.has(playerNumber)) {
+                            playerNumber++;
+                        }
+                        allTeamPlayers.push({
+                            id: app.data.generateUniqueId(),
+                            teamId,
+                            name: `Player ${playerNumber}`,
+                            number: playerNumber,
+                            position: positions[i % positions.length] || 'Unknown',
+                            stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 }
+                        });
+                        usedNumbers.add(playerNumber);
+                    }
+                    app.data.state.players[teamId] = allTeamPlayers;
                 });
                 this.generateFixtures(leagueTournament.id);
                 this.simulateAllRemainingFixtures(leagueTournament.id); // Simulate all for demo
 
                 // Seed Champions League Tournament
                 const clTeamsData = [
-                    { name: 'Real Madrid', shortName: 'RMA', country: 'Spain', primaryColor: '#FFFFFF', secondaryColor: '#000000' },
-                    { name: 'FC Barcelona', shortName: 'BAR', country: 'Spain', primaryColor: '#A50044', secondaryColor: '#004D98' },
-                    { name: 'Bayern Munich', shortName: 'BAY', country: 'Germany', primaryColor: '#DC052D', secondaryColor: '#FFFFFF' },
-                    { name: 'Borussia Dortmund', shortName: 'BVB', country: 'Germany', primaryColor: '#FDE100', secondaryColor: '#000000' },
-                    { name: 'Paris SG', shortName: 'PSG', country: 'France', primaryColor: '#004170', secondaryColor: '#DA291C' },
-                    { name: 'Juventus FC', shortName: 'JUV', country: 'Italy', primaryColor: '#000000', secondaryColor: '#FFFFFF' },
-                    { name: 'Inter Milan', shortName: 'INT', country: 'Italy', primaryColor: '#000000', secondaryColor: '#0070B8' },
-                    { name: 'AC Milan', shortName: 'ACM', country: 'Italy', primaryColor: '#FB090B', secondaryColor: '#000000' },
-                    { name: 'Man City', shortName: 'MCI', country: 'England', primaryColor: '#6CABDD', secondaryColor: '#1C2C5B' },
-                    { name: 'Liverpool FC', shortName: 'LIV', country: 'England', primaryColor: '#C8102E', secondaryColor: '#00B2A9' },
-                    { name: 'Ajax', shortName: 'AJX', country: 'Netherlands', primaryColor: '#D2122E', secondaryColor: '#FFFFFF' },
-                    { name: 'Porto', shortName: 'POR', country: 'Portugal', primaryColor: '#004288', secondaryColor: '#FFFFFF' },
-                    { name: 'Benfica', shortName: 'BEN', country: 'Portugal', primaryColor: '#ED1C24', secondaryColor: '#FFFFFF' },
-                    { name: 'Atletico Madrid', shortName: 'ATM', country: 'Spain', primaryColor: '#CB3524', secondaryColor: '#FFFFFF' },
-                    { name: 'RB Leipzig', shortName: 'RBL', country: 'Germany', primaryColor: '#002D62', secondaryColor: '#FFFFFF' },
-                    { name: 'Napoli', shortName: 'NAP', country: 'Italy', primaryColor: '#008CFF', secondaryColor: '#FFFFFF' },
+                    { name: 'Real Madrid', shortName: 'RMA', country: 'Spain', city: 'Madrid', primaryColor: '#FFFFFF', secondaryColor: '#000000' },
+                    { name: 'FC Barcelona', shortName: 'BAR', country: 'Spain', city: 'Barcelona', primaryColor: '#A50044', secondaryColor: '#004D98' },
+                    { name: 'Bayern Munich', shortName: 'BAY', country: 'Germany', city: 'Munich', primaryColor: '#DC052D', secondaryColor: '#FFFFFF' },
+                    { name: 'Borussia Dortmund', shortName: 'BVB', country: 'Germany', city: 'Dortmund', primaryColor: '#FDE100', secondaryColor: '#000000' },
+                    { name: 'Paris SG', shortName: 'PSG', country: 'France', city: 'Paris', primaryColor: '#004170', secondaryColor: '#DA291C' },
+                    { name: 'Juventus FC', shortName: 'JUV', country: 'Italy', city: 'Turin', primaryColor: '#000000', secondaryColor: '#FFFFFF' },
+                    { name: 'Inter Milan', shortName: 'INT', country: 'Italy', city: 'Milan', primaryColor: '#000000', secondaryColor: '#0070B8' },
+                    { name: 'AC Milan', shortName: 'ACM', country: 'Italy', city: 'Milan', primaryColor: '#FB090B', secondaryColor: '#000000' },
+                    { name: 'Man City', shortName: 'MCI', country: 'England', city: 'Manchester', primaryColor: '#6CABDD', secondaryColor: '#1C2C5B' },
+                    { name: 'Liverpool FC', shortName: 'LIV', country: 'England', city: 'Liverpool', primaryColor: '#C8102E', secondaryColor: '#00B2A9' },
+                    { name: 'Ajax', shortName: 'AJX', country: 'Netherlands', city: 'Amsterdam', primaryColor: '#D2122E', secondaryColor: '#FFFFFF' },
+                    { name: 'Porto', shortName: 'POR', country: 'Portugal', city: 'Porto', primaryColor: '#004288', secondaryColor: '#FFFFFF' },
+                    { name: 'Benfica', shortName: 'BEN', country: 'Portugal', city: 'Lisbon', primaryColor: '#ED1C24', secondaryColor: '#FFFFFF' },
+                    { name: 'Atletico Madrid', shortName: 'ATM', country: 'Spain', city: 'Madrid', primaryColor: '#CB3524', secondaryColor: '#FFFFFF' },
+                    { name: 'RB Leipzig', shortName: 'RBL', country: 'Germany', city: 'Leipzig', primaryColor: '#002D62', secondaryColor: '#FFFFFF' },
+                    { name: 'Napoli', shortName: 'NAP', country: 'Italy', city: 'Naples', primaryColor: '#008CFF', secondaryColor: '#FFFFFF' },
                 ];
                 const clTournament = this.createTournament('Champions League 2024/25', 'champions');
                 clTeamsData.forEach(teamData => {
                     const teamId = app.data.generateUniqueId();
                     app.data.state.teams[teamId] = { id: teamId, ...teamData, stats: { P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0, FairPlay: 0 } };
                     clTournament.teams.push(teamId);
-                    app.data.state.players[teamId] = [{ id: app.data.generateUniqueId(), teamId, name: `${teamData.shortName} Star`, number: 9, position: 'FW', stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 } }];
+                    // For CL, add some placeholder players
+                    const allTeamPlayers = [];
+                    const usedNumbers = new Set();
+
+                    allTeamPlayers.push({ id: app.data.generateUniqueId(), teamId, name: `${teamData.shortName} Star`, number: 9, position: 'FW', stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 } });
+                    usedNumbers.add(9); // Add the 'Star' player's number to usedNumbers
+
+                    const positions = ['GK', 'DF', 'DF', 'DF', 'DF', 'MF', 'MF', 'MF', 'MF', 'FW', 'FW', 'FW', 'FW', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB'];
+                    for (let i = 0; allTeamPlayers.length < 20 && i < positions.length; i++) {
+                        let playerNumber = i + 1;
+                        while (usedNumbers.has(playerNumber)) {
+                            playerNumber++;
+                        }
+                        allTeamPlayers.push({
+                            id: app.data.generateUniqueId(), teamId, name: `${teamData.shortName} Player ${playerNumber}`, number: playerNumber, position: positions[i % positions.length] || 'Unknown', stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 }
+                        });
+                        usedNumbers.add(playerNumber);
+                    }
+                    app.data.state.players[teamId] = allTeamPlayers;
                 });
                 this.drawGroups(clTournament.id);
                 this.generateFixtures(clTournament.id);
-                this.simulateAllRemainingFixtures(clTournament.id);
+                this.simulateAllRemainingFixtures(clTournament.id); // Simulate all group stage matches
                 this.generateKnockoutFixtures(clTournament.id); // Generate knockout after group stage is "played"
                 this.simulateAllRemainingFixtures(clTournament.id); // Simulate knockout matches
 
                 // Seed World Cup Tournament
                 const wcTeamsData = [
-                    { name: 'Brazil', shortName: 'BRA', country: 'Brazil', primaryColor: '#009B3A', secondaryColor: '#FFDD00' },
-                    { name: 'Argentina', shortName: 'ARG', country: 'Argentina', primaryColor: '#74ACDF', secondaryColor: '#FFFFFF' },
-                    { name: 'France', shortName: 'FRA', country: 'France', primaryColor: '#002395', secondaryColor: '#ED2939' },
-                    { name: 'Germany', shortName: 'GER', country: 'Germany', primaryColor: '#000000', secondaryColor: '#DD0000' },
-                    { name: 'Spain', shortName: 'ESP', country: 'Spain', primaryColor: '#AA151B', secondaryColor: '#F1BF00' },
-                    { name: 'England', shortName: 'ENG', country: 'England', primaryColor: '#FFFFFF', secondaryColor: '#C8102E' },
-                    { name: 'Portugal', shortName: 'POR', country: 'Portugal', primaryColor: '#046A38', secondaryColor: '#DA291C' },
-                    { name: 'Italy', shortName: 'ITA', country: 'Italy', primaryColor: '#008C45', secondaryColor: '#FFFFFF' },
-                    { name: 'Netherlands', shortName: 'NED', country: 'Netherlands', primaryColor: '#FF3C00', secondaryColor: '#FFFFFF' },
-                    { name: 'Belgium', shortName: 'BEL', country: 'Belgium', primaryColor: '#FDDA24', secondaryColor: '#EF3340' },
-                    { name: 'USA', shortName: 'USA', country: 'USA', primaryColor: '#002868', secondaryColor: '#BF0A30' },
-                    { name: 'Mexico', shortName: 'MEX', country: 'Mexico', primaryColor: '#006847', secondaryColor: '#C8102E' },
-                    { name: 'Japan', shortName: 'JPN', country: 'Japan', primaryColor: '#000080', secondaryColor: '#BC002D' },
-                    { name: 'South Korea', shortName: 'KOR', country: 'South Korea', primaryColor: '#C8102E', secondaryColor: '#000080' },
-                    { name: 'Australia', shortName: 'AUS', country: 'Australia', primaryColor: '#00843D', secondaryColor: '#FFCD00' },
-                    { name: 'Canada', shortName: 'CAN', country: 'Canada', primaryColor: '#FF0000', secondaryColor: '#FFFFFF' },
+                    { name: 'Brazil', shortName: 'BRA', country: 'Brazil', city: 'Rio', primaryColor: '#009B3A', secondaryColor: '#FFDD00' },
+                    { name: 'Argentina', shortName: 'ARG', country: 'Argentina', city: 'Buenos Aires', primaryColor: '#74ACDF', secondaryColor: '#FFFFFF' },
+                    { name: 'France', shortName: 'FRA', country: 'France', city: 'Paris', primaryColor: '#002395', secondaryColor: '#ED2939' },
+                    { name: 'Germany', shortName: 'GER', country: 'Germany', city: 'Berlin', primaryColor: '#000000', secondaryColor: '#DD0000' },
+                    { name: 'Spain', shortName: 'ESP', country: 'Spain', city: 'Madrid', primaryColor: '#AA151B', secondaryColor: '#F1BF00' },
+                    { name: 'England', shortName: 'ENG', country: 'England', city: 'London', primaryColor: '#FFFFFF', secondaryColor: '#C8102E' },
+                    { name: 'Portugal', shortName: 'POR', country: 'Portugal', city: 'Lisbon', primaryColor: '#046A38', secondaryColor: '#DA291C' },
+                    { name: 'Italy', shortName: 'ITA', country: 'Italy', city: 'Rome', primaryColor: '#008C45', secondaryColor: '#FFFFFF' },
+                    { name: 'Netherlands', shortName: 'NED', country: 'Netherlands', city: 'Amsterdam', primaryColor: '#FF3C00', secondaryColor: '#FFFFFF' },
+                    { name: 'Belgium', shortName: 'BEL', country: 'Belgium', city: 'Brussels', primaryColor: '#FDDA24', secondaryColor: '#EF3340' },
+                    { name: 'USA', shortName: 'USA', country: 'USA', city: 'Washington', primaryColor: '#002868', secondaryColor: '#BF0A30' },
+                    { name: 'Mexico', shortName: 'MEX', country: 'Mexico', city: 'Mexico City', primaryColor: '#006847', secondaryColor: '#C8102E' },
+                    { name: 'Japan', shortName: 'JPN', country: 'Japan', city: 'Tokyo', primaryColor: '#000080', secondaryColor: '#BC002D' },
+                    { name: 'South Korea', shortName: 'KOR', country: 'South Korea', city: 'Seoul', primaryColor: '#C8102E', secondaryColor: '#000080' },
+                    { name: 'Australia', shortName: 'AUS', country: 'Australia', city: 'Sydney', primaryColor: '#00843D', secondaryColor: '#FFCD00' },
+                    { name: 'Canada', shortName: 'CAN', country: 'Canada', city: 'Ottawa', primaryColor: '#FF0000', secondaryColor: '#FFFFFF' },
                 ];
                 const wcTournament = this.createTournament('World Cup 2026', 'worldcup');
                 wcTeamsData.forEach(teamData => {
                     const teamId = app.data.generateUniqueId();
                     app.data.state.teams[teamId] = { id: teamId, ...teamData, stats: { P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, Pts: 0, FairPlay: 0 } };
                     wcTournament.teams.push(teamId);
-                    app.data.state.players[teamId] = [{ id: app.data.generateUniqueId(), teamId, name: `${teamData.shortName} Hero`, number: 10, position: 'FW', stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 } }];
-                });
-                this.drawGroups(wcTournament.id);
-                this.generateFixtures(wcTournament.id);
-                this.simulateAllRemainingFixtures(wcTournament.id);
-                this.generateKnockoutFixtures(wcTournament.id);
-                this.simulateAllRemainingFixtures(wcTournament.id);
+                    // For WC, add some placeholder players
+                    const allTeamPlayers = [];
+                    const usedNumbers = new Set();
 
-                app.data.saveState(); // FIX: Save state after seeding demo data
+                    allTeamPlayers.push({ id: app.data.generateUniqueId(), teamId, name: `${teamData.shortName} Hero`, number: 10, position: 'FW', stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 } });
+                    usedNumbers.add(10); // Add the 'Hero' player's number to usedNumbers
+
+                    // Add other placeholder players (up to 20 total, since 1 'Hero' is already added)
+                    const positions = ['GK', 'DF', 'DF', 'DF', 'DF', 'MF', 'MF', 'MF', 'MF', 'FW', 'FW', 'FW', 'FW', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB', 'SUB'];
+                    for (let i = 0; allTeamPlayers.length < 20 && i < positions.length; i++) { // Fill up to 20 players
+                        let playerNumber = i + 1;
+                        while (usedNumbers.has(playerNumber)) {
+                            playerNumber++;
+                        }
+                        allTeamPlayers.push({
+                            id: app.data.generateUniqueId(),
+                            teamId,
+                            name: `${teamData.shortName} Player ${playerNumber}`,
+                            number: playerNumber,
+                            position: positions[i % positions.length] || 'Unknown',
+                            stats: { goals: 0, assists: 0, yellowCards: 0, redCards: 0, minutes: 0 }
+                        });
+                        usedNumbers.add(playerNumber);
+                    }
+                    app.data.state.players[teamId] = allTeamPlayers;
+                });
+                this.drawGroups(wcTournament.id); // Correct call using 'this'
+                this.generateFixtures(wcTournament.id); // Correct call using 'this'
+                this.simulateAllRemainingFixtures(wcTournament.id); // Correct call using 'this'
+                this.generateKnockoutFixtures(wcTournament.id); // Correct call using 'this'
+                this.simulateAllRemainingFixtures(wcTournament.id); // Correct call using 'this'
+
+                app.data.saveState();
                 alert('Demo data seeded successfully!');
             }
         };
@@ -5213,10 +5886,9 @@
             app.ui.init();
             app.logic.init();
 
-            app.data.loadThemePreference(); // Load theme preference first
-            app.ui.applyDarkModePreference(); // Apply it to the body
+            app.data.loadThemePreference();
+            app.ui.applyDarkModePreference();
 
-            // FIX: On page load, check if saved data exists in localStorage: If yes → load it. If no → seed demo data.
             if (!app.data.loadState()) {
                 console.log('No saved data found, seeding demo data.');
                 app.logic.seedDemoData();
